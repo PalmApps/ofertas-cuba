@@ -6,6 +6,7 @@ import {
   extractPhone,
   extractPrice,
   findProvinceByName,
+  looksLikeOffer,
   normalizeProductKey,
 } from "@ofertas-cuba/shared";
 import {
@@ -39,37 +40,53 @@ export function createBot(token: string): Bot {
     return kb;
   }
 
+  async function indexOfferText(
+    text: string,
+    provinceId: string | null,
+    sourceUrl: string | null,
+  ): Promise<boolean> {
+    if (!looksLikeOffer(text)) return false;
+    return indexForwardedOffer(text, provinceId, sourceUrl);
+  }
+
   bot.command("start", async (ctx) => {
-    const user = await getUser(ctx.chat.id);
-    const lines = [
-      "OfertasCuba — compara ofertas de compra y venta en Cuba.",
-      "",
-      "Comandos:",
-      "/buscar <producto>",
-      "/alerta <producto>",
-      "/provincia <nombre>",
-      "/misalertas",
-      "",
-      `Web: ${appUrl}`,
-      "",
-      "Reenvia un post o captura para ayudar a indexar ofertas.",
-    ];
+    try {
+      const user = await getUser(ctx.chat.id);
+      const lines = [
+        "OfertasCuba — compara ofertas de compra y venta en Cuba.",
+        "",
+        "Comandos:",
+        "/buscar <producto>",
+        "/alerta <producto>",
+        "/provincia <nombre>",
+        "/misalertas",
+        "",
+        `Web: ${appUrl}`,
+        "",
+        "Reenvia un post o captura para ayudar a indexar ofertas.",
+      ];
 
-    if (!user.provinceId) {
-      await ctx.reply(
-        [...lines, "", "Elige tu provincia para empezar:"].join("\n"),
-        { reply_markup: provincePickerKeyboard() },
+      if (!user.provinceId) {
+        await ctx.reply(
+          [...lines, "", "Elige tu provincia para empezar:"].join("\n"),
+          { reply_markup: provincePickerKeyboard() },
+        );
+        return;
+      }
+
+      lines.splice(
+        2,
+        0,
+        `Provincia: ${provinceName(user.provinceId)}`,
+        "",
       );
-      return;
+      await ctx.reply(lines.join("\n"));
+    } catch (err) {
+      console.error("/start error:", err);
+      await ctx.reply(
+        "OfertasCuba — compara ofertas en Cuba.\n\nElige provincia con /provincia La Habana",
+      );
     }
-
-    lines.splice(
-      2,
-      0,
-      `Provincia: ${provinceName(user.provinceId)}`,
-      "",
-    );
-    await ctx.reply(lines.join("\n"));
   });
 
   bot.callbackQuery(/^prov:(.+)$/, async (ctx) => {
@@ -200,7 +217,7 @@ export function createBot(token: string): Bot {
     const phone = extractPhone(text);
     const productKey = normalizeProductKey(text);
     const user = await getUser(ctx.chat!.id);
-    const indexed = await indexForwardedOffer(text, user.provinceId);
+    const indexed = await indexOfferText(text, user.provinceId, null);
 
     await ctx.reply(
       [
@@ -224,7 +241,7 @@ export function createBot(token: string): Bot {
 
     if (caption) {
       const user = await getUser(ctx.chat.id);
-      const indexed = await indexForwardedOffer(caption, user.provinceId);
+      const indexed = await indexOfferText(caption, user.provinceId, null);
       await ctx.reply(
         indexed
           ? "Foto recibida. Texto indexado."
@@ -234,6 +251,14 @@ export function createBot(token: string): Bot {
     }
 
     await ctx.reply("Foto recibida. Anade texto o caption para indexar.");
+  });
+
+  bot.on("channel_post:text", async (ctx) => {
+    const text = ctx.channelPost.text;
+    if (!text || text.startsWith("/")) return;
+    if (containsBlacklistedTerm(text)) return;
+    if (!looksLikeOffer(text)) return;
+    await indexForwardedOffer(text, null, null, "telegram");
   });
 
   bot.catch((err) => {

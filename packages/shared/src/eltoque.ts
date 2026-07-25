@@ -1,3 +1,6 @@
+import { env } from "./env";
+import { fetchPublicElToqueRates } from "./eltoque-public";
+
 export interface ElToqueRates {
   date: string;
   usdCup: number | null;
@@ -21,12 +24,20 @@ function pickRate(
 }
 
 export async function fetchElToqueRates(
-  apiKey = process.env.EL_TOQUE_API_KEY ?? process.env.EL_TOQUE_API_TOKEN,
+  apiKey = env("EL_TOQUE_API_KEY") ?? env("EL_TOQUE_API_TOKEN"),
 ): Promise<ElToqueRates> {
-  if (!apiKey) {
-    throw new Error("EL_TOQUE_API_KEY is required");
+  if (apiKey) {
+    try {
+      return await fetchElToqueRatesApi(apiKey);
+    } catch (err) {
+      console.warn("El Toque API failed, using public fallback:", err);
+    }
   }
 
+  return fetchPublicElToqueRates();
+}
+
+async function fetchElToqueRatesApi(apiKey: string): Promise<ElToqueRates> {
   const now = new Date();
   const from = new Date(now.getTime() - 48 * 60 * 60 * 1000);
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
