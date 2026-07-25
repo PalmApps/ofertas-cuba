@@ -12,11 +12,13 @@ function useDb(): boolean {
 export async function indexForwardedOffer(
   text: string,
   provinceId: string | null,
+  sourceUrl: string | null = null,
+  sourcePlatform: "telegram_forward" | "telegram" = "telegram_forward",
 ): Promise<boolean> {
   const parsed = parseOfferText(text, {
-    sourcePlatform: "telegram_forward",
-    sourceUrl: null,
-    externalGroupId: `bot:${Date.now()}`,
+    sourcePlatform,
+    sourceUrl,
+    externalGroupId: sourceUrl ?? `bot:${Date.now()}`,
   });
 
   if (!parsed) return false;
@@ -47,7 +49,7 @@ export async function indexForwardedOffer(
     ...parsed,
     priceUsd,
     priceEur,
-    telegramMessageUrl: null,
+    telegramMessageUrl: sourceUrl,
     fbPostUrl: null,
   });
 

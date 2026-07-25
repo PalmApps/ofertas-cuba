@@ -1,6 +1,7 @@
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
-import { loadJson, parseOfferText, persistOffers } from "../lib.js";
+import { loadJson, persistOffers } from "../lib.js";
+import { looksLikeOffer, parseOfferText } from "@ofertas-cuba/shared";
 
 interface TelegramChannelSeed {
   username: string;
@@ -30,19 +31,11 @@ export async function runTelegramScraper(): Promise<void> {
   const session = process.env.TELEGRAM_USER_SESSION;
 
   if (!apiId || !apiHash || !session) {
-    console.warn(
-      "TELEGRAM_API_ID / TELEGRAM_API_HASH / TELEGRAM_USER_SESSION no configurados — dry-run",
+    console.error(
+      "Faltan TELEGRAM_API_ID, TELEGRAM_API_HASH o TELEGRAM_USER_SESSION.",
+      "Genera sesion: pnpm --filter @ofertas-cuba/scraper auth:telegram",
     );
-    const parsed = parseOfferText(
-      "Laptop Lenovo 350 USD, entrega Camaguey, t.me/vendedor",
-      {
-        sourcePlatform: "telegram",
-        sourceUrl: "https://t.me/example/1",
-        externalGroupId: "example",
-      },
-    );
-    await persistOffers(parsed ? [parsed] : []);
-    return;
+    process.exit(1);
   }
 
   if (channels.length === 0) {
@@ -78,7 +71,7 @@ export async function runTelegramScraper(): Promise<void> {
           externalGroupId: channel.username,
         });
 
-        if (parsed) {
+        if (parsed && looksLikeOffer(text)) {
           parsed.provinceId = channel.provinceId;
           allOffers.push(parsed);
         }
