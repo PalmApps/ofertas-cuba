@@ -3,12 +3,15 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import {
   containsBlacklistedTerm,
+  convertToUsdEur,
   extractCurrency,
   extractPhone,
   extractPrice,
+  fetchElToqueRates,
   normalizeProductKey,
   type ParsedOffer,
 } from "@ofertas-cuba/shared";
+import { createDb, insertOffer } from "@ofertas-cuba/db";
 
 const seedsDir = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -48,6 +51,41 @@ export async function persistOffers(offers: ParsedOffer[]): Promise<void> {
     }
     return;
   }
-  // TODO fase 1: insert into Neon via Drizzle or pg
-  console.log(`[db] would persist ${offers.length} offers`);
+
+  const db = createDb();
+  let rates = null;
+  try {
+    rates = await fetchElToqueRates();
+  } catch (err) {
+    console.warn("El Toque unavailable:", err);
+  }
+
+  for (const offer of offers) {
+    let priceUsd: number | null = null;
+    let priceEur: number | null = null;
+    if (offer.priceOriginal != null && rates) {
+      const converted = convertToUsdEur(
+        offer.priceOriginal,
+        offer.currency,
+        rates,
+      );
+      priceUsd = converted.usd;
+      priceEur = converted.eur;
+    }
+
+    await insertOffer(db, {
+      ...offer,
+      priceUsd,
+      priceEur,
+      fbPostUrl:
+        offer.sourcePlatform === "facebook" ? offer.sourceUrl : null,
+      telegramMessageUrl:
+        offer.sourcePlatform === "telegram" ||
+        offer.sourcePlatform === "telegram_forward"
+          ? offer.sourceUrl
+          : null,
+    });
+  }
+
+  console.log(`[db] persisted ${offers.length} offers`);
 }

@@ -12,6 +12,7 @@
     "auth:telegram": "tsx src/telegram/auth.ts"
   },
   "dependencies": {
+    "@ofertas-cuba/db": "workspace:*",
     "@ofertas-cuba/shared": "workspace:*",
     "telegram": "^2.26.22"
   },

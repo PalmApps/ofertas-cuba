@@ -1,5 +1,6 @@
 "use client";
 
+import { SearchPanel } from "@/components/SearchPanel";
 import { useProvince } from "@/components/ProvinceGate";
 
 export default function HomePage() {
@@ -30,24 +31,11 @@ export default function HomePage() {
         </p>
       </header>
 
-      <div className="card">
-        <h2>En construccion (fase 0)</h2>
-        <p>
-          Proximamente: busqueda y comparacion de ofertas desde grupos publicos
-          de <strong>Facebook</strong> y <strong>Telegram</strong>, con precios
-          en USD/EUR de referencia (El Toque).
-        </p>
-        <ul>
-          <li>Web PWA en ofertascuba.vercel.app</li>
-          <li>Bot Telegram para busqueda, alertas y reenvio de ofertas</li>
-          <li>Scrapers en GitHub Actions</li>
-        </ul>
-      </div>
+      <SearchPanel />
 
       <p className="disclaimer">
-        Los precios mostrados provienen de publicaciones publicas. OfertasCuba no
-        garantiza disponibilidad ni autenticidad. Usa el boton reportar cuando
-        este disponible.
+        Precios del mercado informal (Facebook + Telegram). Referencia USD/EUR
+        via El Toque. Verifica siempre antes de pagar.
       </p>
     </main>
   );

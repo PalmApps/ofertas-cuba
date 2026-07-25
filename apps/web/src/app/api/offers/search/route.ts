@@ -1,0 +1,25 @@
+import { NextResponse } from "next/server";
+import { createDb, searchOffers } from "@ofertas-cuba/db";
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const q = searchParams.get("q")?.trim();
+  const provinceId = searchParams.get("provincia") || null;
+
+  if (!q) {
+    return NextResponse.json({ error: "q required" }, { status: 400 });
+  }
+
+  if (!process.env.DATABASE_URL) {
+    return NextResponse.json({ offers: [], message: "DATABASE_URL not configured" });
+  }
+
+  try {
+    const db = createDb();
+    const rows = await searchOffers(db, { query: q, provinceId, limit: 30 });
+    return NextResponse.json({ offers: rows });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: "search failed" }, { status: 500 });
+  }
+}

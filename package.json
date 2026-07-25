@@ -11,7 +11,9 @@
     "typecheck": "pnpm -r typecheck",
     "scrape:facebook": "pnpm --filter @ofertas-cuba/scraper scrape:facebook",
     "scrape:telegram": "pnpm --filter @ofertas-cuba/scraper scrape:telegram",
-    "discover:groups": "pnpm --filter @ofertas-cuba/scraper discover"
+    "discover:groups": "pnpm --filter @ofertas-cuba/scraper discover",
+    "db:push": "pnpm --filter @ofertas-cuba/db db:push",
+    "db:seed": "pnpm --filter @ofertas-cuba/db db:seed"
   },
   "engines": {
     "node": ">=20"

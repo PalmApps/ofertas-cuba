@@ -1,5 +1,5 @@
 {
-  "name": "@ofertas-cuba/shared",
+  "name": "@ofertas-cuba/db",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,10 +10,18 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "lint": "echo \"(shared) no lint yet\""
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/seed.ts"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
+    "@ofertas-cuba/shared": "workspace:*",
+    "drizzle-orm": "^0.44.3"
   },
   "devDependencies": {
     "@types/node": "^22.16.5",
+    "drizzle-kit": "^0.31.4",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }
 }

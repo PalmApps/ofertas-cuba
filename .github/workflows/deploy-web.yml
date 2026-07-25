@@ -1,0 +1,29 @@
+name: Deploy web (Vercel)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/web/**"
+      - "packages/**"
+  workflow_dispatch:
+
+# Vercel Git integration is preferred; this workflow documents required secrets.
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @ofertas-cuba/web build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          EL_TOQUE_API_KEY: ${{ secrets.EL_TOQUE_API_KEY }}
