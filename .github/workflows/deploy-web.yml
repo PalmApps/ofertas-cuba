@@ -8,8 +8,6 @@ on:
       - "packages/**"
   workflow_dispatch:
 
-# Vercel Git integration is preferred; this workflow documents required secrets.
-
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -23,7 +21,21 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @ofertas-cuba/shared test
       - run: pnpm --filter @ofertas-cuba/web build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           EL_TOQUE_API_KEY: ${{ secrets.EL_TOQUE_API_KEY }}
+
+  notify-forum:
+    needs: verify
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: PalmApps/palmapps-notify@v2
+        with:
+          telegram_bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          telegram_forum_chat_id: ${{ secrets.TELEGRAM_FORUM_CHAT_ID }}
+          app: ofertas-cuba
+          version: ${{ github.sha }}
+          template: web-deploy

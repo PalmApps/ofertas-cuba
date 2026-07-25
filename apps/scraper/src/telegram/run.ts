@@ -10,7 +10,7 @@ interface TelegramChannelSeed {
   notes?: string;
 }
 
-const SKIP_USERNAMES = new Set(["palmapps", "ejemplo_compraventa_cuba", "ejemplo_habana_ventas"]);
+const SKIP_USERNAMES = new Set<string>();
 
 function messageUrl(username: string, messageId: number): string {
   return `https://t.me/${username}/${messageId}`;

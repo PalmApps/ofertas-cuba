@@ -10,10 +10,12 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test src/parser/price.test.ts",
     "lint": "echo \"(shared) no lint yet\""
   },
   "devDependencies": {
     "@types/node": "^22.16.5",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }
 }

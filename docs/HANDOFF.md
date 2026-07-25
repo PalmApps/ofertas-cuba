@@ -98,16 +98,16 @@ packages/db/              Drizzle schema, searchOffers, insertOffer
 
 | Componente | Estado |
 |------------|--------|
-| Monorepo local | ✅ Commits en rama `ofertas-cuba-main` (palmapps-notify) |
-| Repo `PalmApps/ofertas-cuba` | ⚠️ Puede estar **vacío** — push pendiente |
-| Web build | ✅ `pnpm --filter @ofertas-cuba/web build` |
-| Bot funcional | ✅ Comandos + provincia inline (memoria) |
-| DB schema Drizzle | ✅ `packages/db` — falta Neon real |
-| El Toque client | ✅ `packages/shared/src/eltoque.ts` |
-| Scrapers | ⚠️ Stub/dry-run |
-| Foro topic | ❌ Pendiente setup-forum.ps1 |
-| Vercel | ❌ Pendiente import |
-| palmapps-notify PR #1 | Solo catálogo apps.json — merge OK independiente |
+| Repo `PalmApps/ofertas-cuba` | ✅ `main` publicado |
+| Web + Vercel | ✅ https://ofertascuba.vercel.app (root `apps/web`) |
+| Bot webhook | ✅ `@Ofertas_Cuba_bot` → `/api/telegram` |
+| DB Neon | ✅ Schema + 16 provincias |
+| Bot store | ✅ Neon (`telegram_users`, `alerts`) |
+| Bot /buscar + reenvios | ✅ Consulta e indexa en Neon |
+| El Toque client | ✅ Falta `EL_TOQUE_API_KEY` en secrets |
+| Scrapers TG | ⚠️ Codigo listo; falta `TELEGRAM_USER_SESSION` |
+| Foro topic | ✅ Thread 67 — falta merge PR catálogo notify |
+| palmapps-notify PR #1 | ⚠️ Añadir `forumTopicId: 67` y merge |
 
 ---
 
@@ -138,18 +138,18 @@ Para CI foro (palmapps-notify action): `TELEGRAM_BOT_TOKEN` + `TELEGRAM_FORUM_CH
 
 ## Checklist Fase 1 (orden sugerido)
 
-- [ ] Push `main` a `PalmApps/ofertas-cuba`
-- [ ] Crear Neon + `DATABASE_URL` en secrets y Vercel
-- [ ] `pnpm db:push && pnpm db:seed`
-- [ ] Import Vercel (root `apps/web`)
-- [ ] Secrets en repo + Vercel env vars
-- [ ] Webhook bot: `apps/web/src/app/api/telegram/route.ts` (crear)
-- [ ] Migrar bot store a Neon (`telegram_users`, `alerts`)
-- [ ] Scraper TG: sesión + grupos semilla reales
+- [x] Push `main` a `PalmApps/ofertas-cuba`
+- [x] Crear Neon + `DATABASE_URL` en secrets y Vercel
+- [x] `pnpm db:push && pnpm db:seed`
+- [x] Import Vercel (root `apps/web`)
+- [ ] Secrets completos repo + Vercel (`EL_TOQUE`, scraper TG)
+- [x] Webhook bot: `apps/web/src/app/api/telegram/route.ts`
+- [x] Migrar bot store a Neon (`telegram_users`, `alerts`)
+- [ ] Scraper TG: sesión + cron con ofertas reales
 - [ ] Scraper FB: implementación básica
-- [ ] `setup-forum.ps1` → topic OfertasCuba
+- [x] `setup-forum.ps1` → topic OfertasCuba (id 67)
 - [ ] Beta anuncio en foro `@palmapps`
-- [ ] Mejorar `extractPrice` (bug: "iPhone 13" → precio 13)
+- [x] Mejorar `extractPrice` (bug: "iPhone 13" → precio 13)
 
 ---
 
