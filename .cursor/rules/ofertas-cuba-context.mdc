@@ -1,0 +1,97 @@
+---
+description: OfertasCuba — producto, arquitectura, decisiones y estado del monorepo
+alwaysApply: true
+---
+
+# OfertasCuba — contexto para agentes
+
+## Visión
+
+Comparador comunitario PalmApps para Cuba: agregar ofertas de compra/venta desde **Facebook** y **Telegram**, normalizar precios (USD/EUR vía El Toque), filtrar por **provincia**, conectar al post o WhatsApp del vendedor.
+
+Inspiración: Idealo (Europa), adaptado al comercio social cubano (grupos FB + WhatsApp/Telegram).
+
+## Decisiones de producto (cerradas)
+
+| Tema | Decisión |
+|------|----------|
+| Usuario principal | Comprador primero; vendedores fase 3 |
+| Cobertura | Toda Cuba; provincia al entrar (`localStorage` web; bot guarda en DB) |
+| Categorías | Todas (compra/venta general) |
+| Fuentes datos | Scraping FB + Telegram Client API + reenvíos al bot |
+| Cuentas web | Sin registro fase 1 |
+| Monedas | Precio original + equivalente USD/EUR (El Toque) |
+| Confianza MVP | Precio, fecha, enlace; reportar oferta; señales fase 2 |
+| Contacto | Post FB + WhatsApp si hay teléfono |
+| Moderación grupos | Auto permisivo; retirar si reportes |
+| Contenido | Lista negra keywords + botón reportar |
+| Idioma | Español; i18n preparado |
+| Scraping host | GitHub Actions (cron) |
+| Repo | Monorepo **separado** de palmapps-notify |
+| Dominio MVP | `ofertascuba.vercel.app` → futuro `ofertas.palmapps.com` |
+
+## Arquitectura monorepo
+
+```
+ofertas-cuba/
+├── apps/web/           # Next.js 15 PWA (Vercel, root deploy)
+├── apps/bot/           # Grammy — @Ofertas_Cuba_bot
+├── apps/scraper/       # Facebook + Telegram (GH Actions)
+├── packages/shared/    # provincias, blacklist, parser, El Toque
+├── packages/db/        # Drizzle + Neon schema
+└── docs/seeds/         # grupos FB, canales TG, keywords
+```
+
+## Bots Telegram (NO mezclar)
+
+| Bot | Username | Uso |
+|-----|----------|-----|
+| Notify (foro) | `@PalmAppsNotify_bot` | CI → topic foro `@palmapps` |
+| **Producto** | `@Ofertas_Cuba_bot` | Búsqueda, alertas, reenvío ofertas |
+
+Secret producto: `TELEGRAM_OFERTAS_BOT_TOKEN` (distinto de `TELEGRAM_BOT_TOKEN`).
+
+## Estado implementación (jul 2026)
+
+### Hecho (Fase 0 + parte Fase 1)
+
+- Monorepo pnpm con web, bot, scraper, shared, db
+- Web: onboarding provincia, búsqueda UI, APIs `/api/offers/search`, `/api/fx`, reportar
+- Bot: `/start`, `/buscar`, `/alerta`, `/provincia`, `/misalertas`, reenvíos (store memoria; falta Neon)
+- `packages/db`: Drizzle schema, search, insert, report
+- `packages/shared`: El Toque client, parser precios, 16 provincias
+- Scrapers: stub FB + TG; persistencia Neon si `DATABASE_URL`
+- GH Actions: `scrape-facebook`, `scrape-telegram`, `discover-groups`, `deploy-web`
+- Catálogo en `palmapps-notify` (`templates/apps.json` key `ofertas-cuba`)
+
+### Pendiente (prioridad)
+
+1. **Push código** a `github.com/PalmApps/ofertas-cuba` (repo puede estar vacío)
+2. Neon: proyecto + `DATABASE_URL` + `pnpm db:push` + `pnpm db:seed`
+3. Secrets repo: `EL_TOQUE_API_KEY`, `TELEGRAM_OFERTAS_BOT_TOKEN`, TG API scraper
+4. Vercel: import `apps/web`, dominio `ofertascuba.vercel.app`
+5. Bot webhook en Vercel (prod 24/7; polling solo dev)
+6. Scraper Telegram operativo (prioridad sobre FB)
+7. Topic foro: `palmapps-notify` → `setup-forum.ps1`
+8. Seeds reales en `docs/seeds/`
+9. PR palmapps-notify #1 (solo catálogo) — merge independiente
+
+## Rama puente (si repo vacío)
+
+Código completo también en:
+`https://github.com/PalmApps/palmapps-notify/tree/ofertas-cuba-main`
+
+Importar: ver `docs/IMPORT.md`
+
+## Métricas MVP
+
+1. ≥ 500 ofertas activas (<72h) en ≥ 5 provincias
+2. ≥ 100 alertas Telegram activas
+3. 20 feedbacks en topic foro OfertasCuba
+
+## Convenciones código
+
+- No commitear `.env` ni tokens
+- Minimizar scope; seguir patrones PalmApps (Next.js, Vercel)
+- Copy público: novedades, no "release/changelog/deploy"
+- Parser precios: mejorar `extractPrice` (evitar confundir "iPhone 13" con precio 13)

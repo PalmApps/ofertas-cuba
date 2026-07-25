@@ -1,0 +1,19 @@
+---
+description: UTF-8 obligatorio para textos Telegram y español
+alwaysApply: true
+---
+
+# UTF-8 — Telegram y contenido en español
+
+## Reglas
+
+1. Textos al usuario → archivos `templates/*.txt` UTF-8 o strings en `.ts` del bot (no en `.ps1` inline)
+2. Telegram API → JSON UTF-8 + `Content-Type: application/json; charset=utf-8`
+3. No commitear tokens en plantillas
+4. En scripts PowerShell de palmapps-notify: ver rule homónima en ese repo
+
+## Bot OfertasCuba
+
+- Mensajes del bot en `apps/bot/src/index.ts` (UTF-8)
+- Comandos registrados vía `setMyCommands` en arranque
+- Webhook prod: misma codificación en API route

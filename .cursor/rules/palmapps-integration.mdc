@@ -1,0 +1,82 @@
+---
+description: Integración PalmApps — foro, palmapps-notify, catálogo y CI
+alwaysApply: true
+---
+
+# PalmApps — integración OfertasCuba
+
+## Ecosistema
+
+| Recurso | URL / ubicación |
+|---------|-----------------|
+| Org GitHub | https://github.com/PalmApps |
+| Foro principal | https://t.me/palmapps (`@palmapps`) |
+| Repo notify | https://github.com/PalmApps/palmapps-notify |
+| Repo app | https://github.com/PalmApps/ofertas-cuba |
+| CTA redes | `https://t.me/palmapps` |
+
+## palmapps-notify (repo separado)
+
+Este repo **no** contiene el código de OfertasCuba. Solo:
+
+- `templates/apps.json` → entrada `ofertas-cuba`
+- `templates/history/ofertas-cuba.json`
+- Scripts foro: `setup-forum.ps1`, `notify.sh`
+
+### Crear topic foro
+
+Desde raíz de `palmapps-notify` (Windows):
+
+```powershell
+$env:TELEGRAM_BOT_TOKEN = "..."      # @PalmAppsNotify_bot
+$env:TELEGRAM_FORUM_CHAT_ID = "@palmapps"
+.\scripts\setup-forum.ps1 -Mode topics
+.\scripts\setup-forum.ps1 -Mode apps
+```
+
+Actualiza `forumTopicId` en `apps.json`.
+
+### CI novedades (en ofertas-cuba, no aquí)
+
+```yaml
+- uses: PalmApps/palmapps-notify@v2
+  with:
+    telegram_bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    telegram_forum_chat_id: ${{ secrets.TELEGRAM_FORUM_CHAT_ID }}
+    app: ofertas-cuba
+    version: ${{ github.sha }}
+    template: web-deploy
+```
+
+Usa token **Notify** (`TELEGRAM_BOT_TOKEN`), no el bot producto.
+
+## Copy público
+
+| Evitar | Usar |
+|--------|------|
+| release | novedad, actualización |
+| changelog | qué hay de nuevo |
+| deploy | actualización en la web |
+
+**Eslogan:** "Compara antes de escribir al vendedor."
+
+## Secrets
+
+| Secret | Dónde | Uso |
+|--------|-------|-----|
+| `TELEGRAM_BOT_TOKEN` | Org PalmApps | Notify / foro |
+| `TELEGRAM_OFERTAS_BOT_TOKEN` | Repo ofertas-cuba | Bot producto |
+| `TELEGRAM_FORUM_CHAT_ID` | Org | `@palmapps` |
+| `EL_TOQUE_API_KEY` | Org o repo | Tasas FX (reutilizar Costify) |
+| `DATABASE_URL` | Repo + Vercel | Neon Postgres |
+| `TELEGRAM_API_ID/HASH/USER_SESSION` | Repo | Scraper Telegram |
+
+Nunca poner tokens en rules, código ni commits.
+
+## Apps hermanas (referencia)
+
+| key | Web |
+|-----|-----|
+| costify | https://costify-iota.vercel.app |
+| reservas | https://reservas-taupe.vercel.app |
+| ofertas-cuba | https://ofertascuba.vercel.app |
