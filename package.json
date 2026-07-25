@@ -13,7 +13,8 @@
     "scrape:telegram": "pnpm --filter @ofertas-cuba/scraper scrape:telegram",
     "discover:groups": "pnpm --filter @ofertas-cuba/scraper discover",
     "db:push": "pnpm --filter @ofertas-cuba/db db:push",
-    "db:seed": "pnpm --filter @ofertas-cuba/db db:seed"
+    "db:seed": "pnpm --filter @ofertas-cuba/db db:seed",
+    "bot:webhook:set": "tsx scripts/set-bot-webhook.ts"
   },
   "engines": {
     "node": ">=20"

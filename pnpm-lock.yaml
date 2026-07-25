@@ -10,6 +10,9 @@ importers:
 
   apps/bot:
     dependencies:
+      '@ofertas-cuba/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@ofertas-cuba/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -51,6 +54,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@ofertas-cuba/bot':
+        specifier: workspace:*
+        version: link:../bot
       '@ofertas-cuba/db':
         specifier: workspace:*
         version: link:../../packages/db

@@ -7,15 +7,23 @@ interface TelegramChannelSeed {
   name: string;
   provinceId: string | null;
   type: "channel" | "group";
+  notes?: string;
+}
+
+const SKIP_USERNAMES = new Set(["palmapps", "ejemplo_compraventa_cuba", "ejemplo_habana_ventas"]);
+
+function messageUrl(username: string, messageId: number): string {
+  return `https://t.me/${username}/${messageId}`;
 }
 
 /**
- * Fase 0: valida credenciales si existen.
- * Fase 1: lee mensajes recientes de canales/grupos publicos.
+ * Lee mensajes recientes de canales/grupos publicos semilla.
  */
 export async function runTelegramScraper(): Promise<void> {
-  const channels = loadJson<TelegramChannelSeed[]>("telegram-channels.json");
-  console.log(`Telegram scraper — ${channels.length} fuentes semilla`);
+  const channels = loadJson<TelegramChannelSeed[]>("telegram-channels.json").filter(
+    (c) => !SKIP_USERNAMES.has(c.username) && !c.username.startsWith("ejemplo"),
+  );
+  console.log(`Telegram scraper — ${channels.length} fuentes activas`);
 
   const apiId = Number(process.env.TELEGRAM_API_ID);
   const apiHash = process.env.TELEGRAM_API_HASH;
@@ -29,11 +37,16 @@ export async function runTelegramScraper(): Promise<void> {
       "Laptop Lenovo 350 USD, entrega Camaguey, t.me/vendedor",
       {
         sourcePlatform: "telegram",
-        sourceUrl: "https://t.me/example",
-        externalGroupId: channels[0]?.username ?? null,
+        sourceUrl: "https://t.me/example/1",
+        externalGroupId: "example",
       },
     );
     await persistOffers(parsed ? [parsed] : []);
+    return;
+  }
+
+  if (channels.length === 0) {
+    console.warn("No hay canales semilla reales en docs/seeds/telegram-channels.json");
     return;
   }
 
@@ -47,18 +60,37 @@ export async function runTelegramScraper(): Promise<void> {
   await client.connect();
   console.log("Telegram client connected.");
 
-  for (const channel of channels.slice(0, 5)) {
+  const allOffers = [];
+
+  for (const channel of channels.slice(0, 10)) {
     try {
       const entity = await client.getEntity(channel.username);
-      console.log(`OK: ${channel.name} (${entity.className})`);
-      // TODO fase 1: client.getMessages(entity, { limit: 50 })
+      const messages = await client.getMessages(entity, { limit: 50 });
+      console.log(`OK: ${channel.name} — ${messages.length} mensajes`);
+
+      for (const msg of messages) {
+        const text = msg.message?.trim();
+        if (!text) continue;
+
+        const parsed = parseOfferText(text, {
+          sourcePlatform: "telegram",
+          sourceUrl: messageUrl(channel.username, msg.id),
+          externalGroupId: channel.username,
+        });
+
+        if (parsed) {
+          parsed.provinceId = channel.provinceId;
+          allOffers.push(parsed);
+        }
+      }
     } catch (err) {
       console.warn(`Skip ${channel.username}:`, err);
     }
   }
 
   await client.disconnect();
-  console.log("Telegram scrape run complete (stub).");
+  await persistOffers(allOffers);
+  console.log(`Telegram scrape complete — ${allOffers.length} ofertas parseadas`);
 }
 
 runTelegramScraper().catch((err) => {
