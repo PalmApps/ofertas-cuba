@@ -5,8 +5,11 @@ import { resolve } from "node:path";
 export function loadEnv(): void {
   const candidates = [
     resolve(process.cwd(), ".env"),
+    resolve(process.cwd(), ".env.local"),
     resolve(process.cwd(), "../../.env"),
+    resolve(process.cwd(), "../../.env.local"),
     resolve(import.meta.dirname, "../../../.env"),
+    resolve(import.meta.dirname, "../../../.env.local"),
   ];
 
   for (const path of candidates) {

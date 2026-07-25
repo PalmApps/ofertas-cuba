@@ -13,3 +13,4 @@ dist/
 telegram-session.txt
 coverage/
 *.tsbuildinfo
+.env*.local

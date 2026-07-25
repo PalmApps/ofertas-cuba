@@ -15,6 +15,11 @@ import {
   removeAlert,
   setUserProvince,
 } from "./store";
+import {
+  formatOfferLine,
+  indexForwardedOffer,
+  searchProductOffers,
+} from "./offers";
 
 export function createBot(token: string): Bot {
   const bot = new Bot(token);
@@ -107,17 +112,28 @@ export function createBot(token: string): Bot {
     const user = await getUser(ctx.chat.id);
     const province = provinceName(user.provinceId);
     const searchUrl = `${appUrl}/?q=${encodeURIComponent(query)}&provincia=${user.provinceId ?? ""}`;
+    const results = await searchProductOffers(query, user.provinceId);
 
-    await ctx.reply(
-      [
-        `Busqueda: "${query}"`,
-        `Provincia: ${province}`,
-        "",
-        "El indice web esta en construccion. Pronto veras resultados aqui.",
-        "",
-        `Abrir en web: ${searchUrl}`,
-      ].join("\n"),
-    );
+    const lines = [
+      `Busqueda: "${query}"`,
+      `Provincia: ${province}`,
+      "",
+    ];
+
+    if (results.length === 0) {
+      lines.push(
+        "Sin resultados en el indice.",
+        "Prueba otro termino o reenvia ofertas al bot.",
+      );
+    } else {
+      lines.push(`${results.length} resultado(s):`, "");
+      for (const offer of results) {
+        lines.push(formatOfferLine(offer));
+      }
+    }
+
+    lines.push("", `Ver en web: ${searchUrl}`);
+    await ctx.reply(lines.join("\n"));
   });
 
   bot.command("alerta", async (ctx) => {
@@ -183,16 +199,16 @@ export function createBot(token: string): Bot {
     const currency = extractCurrency(text);
     const phone = extractPhone(text);
     const productKey = normalizeProductKey(text);
+    const user = await getUser(ctx.chat!.id);
+    const indexed = await indexForwardedOffer(text, user.provinceId);
 
     await ctx.reply(
       [
-        "Gracias. Oferta recibida (cola comunidad).",
+        indexed ? "Gracias. Oferta indexada." : "Gracias. Oferta recibida.",
         "",
         `Producto: ${productKey.slice(0, 80) || "(sin texto)"}`,
         price ? `Precio detectado: ${price} ${currency}` : "Precio: no detectado",
         phone ? `Telefono: ${phone}` : "",
-        "",
-        "Indexacion completa en fase 1 (Neon + scrapers).",
       ]
         .filter(Boolean)
         .join("\n"),
@@ -205,10 +221,19 @@ export function createBot(token: string): Bot {
       await ctx.reply("No se puede indexar este contenido.");
       return;
     }
-    await ctx.reply(
-      "Foto recibida. OCR e indexacion en fase 1.\n" +
-        (caption ? `Texto: ${caption.slice(0, 200)}` : "Sin texto en la imagen."),
-    );
+
+    if (caption) {
+      const user = await getUser(ctx.chat.id);
+      const indexed = await indexForwardedOffer(caption, user.provinceId);
+      await ctx.reply(
+        indexed
+          ? "Foto recibida. Texto indexado."
+          : "Foto recibida. Sin texto util para indexar.",
+      );
+      return;
+    }
+
+    await ctx.reply("Foto recibida. Anade texto o caption para indexar.");
   });
 
   bot.catch((err) => {

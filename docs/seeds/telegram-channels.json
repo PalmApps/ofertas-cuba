@@ -1,22 +1,26 @@
 [
   {
-    "username": "palmapps",
-    "name": "PalmApps foro (referencia)",
+    "username": "compra_venta_cuba",
+    "name": "Compra Venta Promo CUBA",
     "provinceId": null,
-    "type": "channel",
-    "notes": "No es grupo de ventas; ejemplo de formato"
+    "type": "channel"
   },
   {
-    "username": "ejemplo_compraventa_cuba",
-    "name": "Compra venta Cuba (ejemplo)",
+    "username": "timbirichi_compra_y_venta_cuba",
+    "name": "Timbirichi Compra/Venta Cuba",
     "provinceId": null,
-    "type": "channel",
-    "notes": "Reemplazar con canales/grupos publicos reales"
+    "type": "group"
   },
   {
-    "username": "ejemplo_habana_ventas",
-    "name": "Ventas La Habana (ejemplo)",
+    "username": "habanetventa",
+    "name": "HabaNet Compra/Ventas La Habana",
     "provinceId": "hab",
+    "type": "group"
+  },
+  {
+    "username": "cubacompras",
+    "name": "Cuba Compra/Ventas",
+    "provinceId": null,
     "type": "group"
   }
 ]

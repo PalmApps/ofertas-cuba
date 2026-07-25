@@ -9,6 +9,7 @@
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
+    "test": "pnpm --filter @ofertas-cuba/shared test",
     "scrape:facebook": "pnpm --filter @ofertas-cuba/scraper scrape:facebook",
     "scrape:telegram": "pnpm --filter @ofertas-cuba/scraper scrape:telegram",
     "discover:groups": "pnpm --filter @ofertas-cuba/scraper discover",

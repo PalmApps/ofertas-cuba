@@ -2,13 +2,9 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import {
-  containsBlacklistedTerm,
   convertToUsdEur,
-  extractCurrency,
-  extractPhone,
-  extractPrice,
   fetchElToqueRates,
-  normalizeProductKey,
+  parseOfferText,
   type ParsedOffer,
 } from "@ofertas-cuba/shared";
 import { createDb, insertOffer } from "@ofertas-cuba/db";
@@ -23,25 +19,7 @@ export function loadJson<T>(filename: string): T {
   return JSON.parse(raw) as T;
 }
 
-export function parseOfferText(
-  text: string,
-  meta: Pick<ParsedOffer, "sourcePlatform" | "sourceUrl" | "externalGroupId">,
-): ParsedOffer | null {
-  if (!text.trim() || containsBlacklistedTerm(text)) return null;
-
-  return {
-    productKey: normalizeProductKey(text),
-    rawText: text.trim(),
-    priceOriginal: extractPrice(text),
-    currency: extractCurrency(text),
-    phone: extractPhone(text),
-    provinceId: null,
-    sourceUrl: meta.sourceUrl,
-    sourcePlatform: meta.sourcePlatform,
-    externalGroupId: meta.externalGroupId,
-    scrapedAt: new Date().toISOString(),
-  };
-}
+export { parseOfferText };
 
 export async function persistOffers(offers: ParsedOffer[]): Promise<void> {
   if (!process.env.DATABASE_URL) {

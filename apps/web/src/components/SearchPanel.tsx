@@ -2,7 +2,7 @@
 
 import { PROVINCES } from "@ofertas-cuba/shared";
 import { useProvince } from "@/components/ProvinceGate";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface OfferRow {
   id: string;
@@ -26,26 +26,46 @@ export function SearchPanel() {
   const [offers, setOffers] = useState<OfferRow[]>([]);
   const [message, setMessage] = useState<string | null>(null);
 
-  const search = useCallback(async () => {
-    if (!query.trim()) return;
-    setLoading(true);
-    setMessage(null);
-    try {
-      const params = new URLSearchParams({ q: query });
-      if (province?.id) params.set("provincia", province.id);
-      const res = await fetch(`/api/offers/search?${params}`);
-      const data = await res.json();
-      if (data.message) setMessage(data.message);
-      setOffers(data.offers ?? []);
-      if (!data.offers?.length && !data.message) {
-        setMessage("Sin resultados. El indice se llena con los scrapers.");
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q")?.trim();
+    if (q) setQuery(q);
+  }, []);
+
+  const runSearch = useCallback(
+    async (term: string) => {
+      if (!term.trim()) return;
+      setLoading(true);
+      setMessage(null);
+      try {
+        const params = new URLSearchParams({ q: term });
+        if (province?.id) params.set("provincia", province.id);
+        const res = await fetch(`/api/offers/search?${params}`);
+        const data = await res.json();
+        if (data.message) setMessage(data.message);
+        setOffers(data.offers ?? []);
+        if (!data.offers?.length && !data.message) {
+          setMessage("Sin resultados. El indice se llena con los scrapers.");
+        }
+      } catch {
+        setMessage("Error de busqueda");
+      } finally {
+        setLoading(false);
       }
-    } catch {
-      setMessage("Error de busqueda");
-    } finally {
-      setLoading(false);
-    }
-  }, [query, province?.id]);
+    },
+    [province?.id],
+  );
+
+  const search = useCallback(async () => {
+    await runSearch(query);
+  }, [query, runSearch]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q")?.trim();
+    if (!q) return;
+    void runSearch(q);
+  }, [province?.id, runSearch]);
 
   return (
     <section className="card" style={{ marginBottom: "1rem" }}>
