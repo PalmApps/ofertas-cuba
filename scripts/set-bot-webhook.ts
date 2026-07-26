@@ -4,7 +4,7 @@
  * Uso: pnpm bot:webhook:set
  */
 import { env } from "@ofertas-cuba/shared";
-import { loadEnv } from "../../bot/src/load-env.js";
+import { loadEnv } from "../apps/bot/src/load-env.js";
 
 loadEnv();
 

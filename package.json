@@ -15,7 +15,7 @@
     "discover:groups": "pnpm --filter @ofertas-cuba/scraper discover",
     "db:push": "pnpm --filter @ofertas-cuba/db db:push",
     "db:seed": "pnpm --filter @ofertas-cuba/db db:seed",
-    "bot:webhook:set": "pnpm --filter @ofertas-cuba/db exec tsx ../../scripts/set-bot-webhook.ts"
+    "bot:webhook:set": "pnpm --filter @ofertas-cuba/bot exec tsx ../../scripts/set-bot-webhook.ts"
   },
   "engines": {
     "node": ">=20"
