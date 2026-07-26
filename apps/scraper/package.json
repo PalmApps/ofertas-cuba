@@ -9,7 +9,8 @@
     "scrape:facebook": "tsx src/facebook/run.ts",
     "scrape:telegram": "tsx src/telegram/run.ts",
     "discover": "tsx src/discover.ts",
-    "auth:telegram": "tsx src/telegram/auth.ts"
+    "auth:telegram": "tsx src/telegram/auth.ts",
+    "auth:telegram:env": "tsx src/telegram/auth-env.ts"
   },
   "dependencies": {
     "@ofertas-cuba/db": "workspace:*",

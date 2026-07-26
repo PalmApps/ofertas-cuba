@@ -37,3 +37,54 @@ export function findProvinceByName(input: string): Province | undefined {
       p.id === normalized,
   );
 }
+
+function normalizeProvinceHint(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase();
+}
+
+const PROVINCE_ALIASES: { pattern: string; id: Province["id"] }[] = [
+  { pattern: "santiago de cuba", id: "stg" },
+  { pattern: "la habana", id: "hab" },
+  { pattern: "villa clara", id: "vcl" },
+  { pattern: "santa clara", id: "vcl" },
+  { pattern: "pinar del rio", id: "pin" },
+  { pattern: "sancti spiritus", id: "ssp" },
+  { pattern: "ciego de avila", id: "cav" },
+  { pattern: "las tunas", id: "ltu" },
+  { pattern: "isla de la juventud", id: "ij" },
+  { pattern: "habana", id: "hab" },
+  { pattern: "camaguey", id: "cmg" },
+  { pattern: "holguin", id: "hol" },
+  { pattern: "matanzas", id: "mat" },
+  { pattern: "granma", id: "gra" },
+  { pattern: "guantanamo", id: "gua" },
+  { pattern: "artemisa", id: "art" },
+  { pattern: "mayabeque", id: "may" },
+  { pattern: "cienfuegos", id: "cfg" },
+];
+
+/** Detecta provincia en titulos de canales/grupos (no en cada post). */
+export function inferProvinceFromText(text: string): Province | undefined {
+  const haystack = normalizeProvinceHint(text);
+  if (!haystack.trim()) return undefined;
+
+  const byName = [...PROVINCES].sort(
+    (a, b) => b.name.length - a.name.length,
+  );
+  for (const province of byName) {
+    if (haystack.includes(normalizeProvinceHint(province.name))) {
+      return province;
+    }
+  }
+
+  for (const alias of PROVINCE_ALIASES) {
+    if (haystack.includes(alias.pattern)) {
+      return PROVINCES.find((p) => p.id === alias.id);
+    }
+  }
+
+  return undefined;
+}
