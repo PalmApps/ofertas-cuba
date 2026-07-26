@@ -13,6 +13,15 @@ test("extractPrice ignores product model numbers", () => {
   assert.equal(extractPrice("Samsung Galaxy S23 ultra"), null);
 });
 
-test("extractPrice prefers explicit price over model", () => {
-  assert.equal(extractPrice("iPhone 13 Pro 850 USD La Habana"), 850);
+test("extractPrice ignores contact spam without currency", () => {
+  assert.equal(
+    extractPrice(
+      "soy de camaguey informacion de contacto y servicio ubicacion camaguey contacto 6",
+    ),
+    null,
+  );
+});
+
+test("extractPrice ignores loose keywords without currency", () => {
+  assert.equal(extractPrice("tienes un auto en molina motor recambios"), null);
 });

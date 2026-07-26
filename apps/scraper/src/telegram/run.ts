@@ -120,6 +120,7 @@ export async function runTelegramScraper(): Promise<void> {
 
         if (parsed && looksLikeOffer(text)) {
           parsed.provinceId = resolveOfferProvinceId(text, provinceId);
+          parsed.sourceChannelName = channelLabels(channel, entity);
           const tags = channelSearchTags(
             channelLabels(channel, entity),
             channel.username,

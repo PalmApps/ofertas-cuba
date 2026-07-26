@@ -127,6 +127,7 @@ export async function insertOffer(
     phone: offer.phone,
     fbPostUrl: offer.fbPostUrl ?? null,
     telegramMessageUrl: offer.telegramMessageUrl ?? null,
+    sourceChannelName: offer.sourceChannelName ?? null,
     provinceId: offer.provinceId,
     scrapedAt: new Date(offer.scrapedAt),
   };

@@ -1,6 +1,10 @@
 "use client";
 
-import { PROVINCES } from "@ofertas-cuba/shared";
+import {
+  PROVINCES,
+  channelNameFromTelegramUrl,
+  offerPreviewTitle,
+} from "@ofertas-cuba/shared";
 import { useProvince } from "@/components/ProvinceGate";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -15,6 +19,7 @@ interface OfferRow {
   phone: string | null;
   fbPostUrl: string | null;
   telegramMessageUrl: string | null;
+  sourceChannelName: string | null;
   sourcePlatform: string;
   provinceId: string | null;
   scrapedAt: string;
@@ -25,6 +30,138 @@ type ScopeMode = "home" | "all" | "custom";
 function provinceLabel(id: string | null): string {
   if (!id) return "Sin provincia";
   return PROVINCES.find((p) => p.id === id)?.name ?? id;
+}
+
+function channelLabel(offer: OfferRow): string {
+  if (offer.sourceChannelName?.trim()) return offer.sourceChannelName.trim();
+  return (
+    channelNameFromTelegramUrl(offer.telegramMessageUrl) ??
+    (offer.fbPostUrl ? "Facebook" : "Oferta")
+  );
+}
+
+function hasDetectedPrice(offer: OfferRow): boolean {
+  return Boolean(
+    offer.priceOriginal &&
+      offer.currency &&
+      offer.currency !== "UNKNOWN",
+  );
+}
+
+function OfferCard({
+  offer,
+  onReport,
+}: {
+  offer: OfferRow;
+  onReport: (id: string) => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const preview = offerPreviewTitle(offer.rawText);
+  const channel = channelLabel(offer);
+
+  return (
+    <li
+      style={{
+        borderTop: "1px solid var(--border)",
+        padding: "0.75rem 0",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "0.78rem",
+          color: "var(--accent)",
+          fontWeight: 600,
+          letterSpacing: "0.02em",
+          marginBottom: "0.25rem",
+        }}
+      >
+        {channel}
+      </div>
+      <strong style={{ display: "block", lineHeight: 1.35 }}>{preview}</strong>
+
+      <div style={{ fontSize: "0.9rem", color: "var(--muted)", marginTop: "0.35rem" }}>
+        {hasDetectedPrice(offer) ? (
+          <>
+            {offer.priceOriginal} {offer.currency}
+            {offer.priceUsd ? ` · ~${Number(offer.priceUsd).toFixed(0)} USD` : ""}
+            {offer.priceEur ? ` · ~${Number(offer.priceEur).toFixed(0)} EUR` : ""}
+          </>
+        ) : (
+          "Precio no detectado"
+        )}
+        {offer.provinceId ? ` · ${provinceLabel(offer.provinceId)}` : ""}
+      </div>
+
+      {expanded && (
+        <pre
+          style={{
+            marginTop: "0.65rem",
+            padding: "0.65rem",
+            borderRadius: 8,
+            background: "var(--bg)",
+            border: "1px solid var(--border)",
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+            fontSize: "0.85rem",
+            fontFamily: "inherit",
+            color: "var(--text)",
+          }}
+        >
+          {offer.rawText}
+        </pre>
+      )}
+
+      <div
+        style={{
+          marginTop: "0.45rem",
+          display: "flex",
+          gap: "0.75rem",
+          flexWrap: "wrap",
+          alignItems: "center",
+        }}
+      >
+        <button
+          type="button"
+          className="link-button"
+          onClick={() => setExpanded((v) => !v)}
+        >
+          {expanded ? "Ocultar mensaje" : "Ver mensaje completo"}
+        </button>
+        {offer.telegramMessageUrl && (
+          <a href={offer.telegramMessageUrl} target="_blank" rel="noreferrer">
+            Abrir en Telegram
+          </a>
+        )}
+        {offer.fbPostUrl && (
+          <a href={offer.fbPostUrl} target="_blank" rel="noreferrer">
+            Facebook
+          </a>
+        )}
+        {offer.phone && (
+          <a
+            href={`https://wa.me/${offer.phone.replace(/\D/g, "")}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            WhatsApp
+          </a>
+        )}
+        <button
+          type="button"
+          style={{
+            background: "none",
+            border: "none",
+            color: "#f87171",
+            cursor: "pointer",
+            padding: 0,
+          }}
+          onClick={() => onReport(offer.id)}
+        >
+          Reportar
+        </button>
+      </div>
+    </li>
+  );
 }
 
 export function SearchPanel() {
@@ -115,6 +252,11 @@ export function SearchPanel() {
     setPicked((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
+  };
+
+  const reportOffer = async (id: string) => {
+    await fetch(`/api/offers/${id}/report`, { method: "POST" });
+    setOffers((prev) => prev.filter((x) => x.id !== id));
   };
 
   return (
@@ -211,56 +353,7 @@ export function SearchPanel() {
 
       <ul style={{ listStyle: "none", padding: 0, marginTop: "1rem" }}>
         {offers.map((o) => (
-          <li
-            key={o.id}
-            style={{
-              borderTop: "1px solid var(--border)",
-              padding: "0.75rem 0",
-            }}
-          >
-            <strong>{o.productKey.slice(0, 80)}</strong>
-            <div style={{ fontSize: "0.9rem", color: "var(--muted)" }}>
-              {o.priceOriginal && o.currency
-                ? `${o.priceOriginal} ${o.currency}`
-                : "Precio no detectado"}
-              {o.priceUsd ? ` · ~${Number(o.priceUsd).toFixed(0)} USD` : ""}
-              {o.priceEur ? ` · ~${Number(o.priceEur).toFixed(0)} EUR` : ""}
-              {o.provinceId ? ` · ${provinceLabel(o.provinceId)}` : ""}
-            </div>
-            <div style={{ marginTop: "0.35rem", display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-              {o.fbPostUrl && (
-                <a href={o.fbPostUrl} target="_blank" rel="noreferrer">
-                  Facebook
-                </a>
-              )}
-              {o.telegramMessageUrl && (
-                <a href={o.telegramMessageUrl} target="_blank" rel="noreferrer">
-                  Telegram
-                </a>
-              )}
-              {o.phone && (
-                <a href={`https://wa.me/${o.phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer">
-                  WhatsApp
-                </a>
-              )}
-              <button
-                type="button"
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#f87171",
-                  cursor: "pointer",
-                  padding: 0,
-                }}
-                onClick={async () => {
-                  await fetch(`/api/offers/${o.id}/report`, { method: "POST" });
-                  setOffers((prev) => prev.filter((x) => x.id !== o.id));
-                }}
-              >
-                Reportar
-              </button>
-            </div>
-          </li>
+          <OfferCard key={o.id} offer={o} onReport={reportOffer} />
         ))}
       </ul>
 
