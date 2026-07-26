@@ -9,6 +9,7 @@ export interface ElToqueRates {
 }
 
 interface TrmiResponse {
+  date?: string;
   tasas?: Record<string, { median?: number; value?: number } | number>;
   data?: Record<string, number>;
 }
@@ -23,8 +24,16 @@ function pickRate(
   return entry.median ?? entry.value ?? null;
 }
 
+function resolveApiKey(): string | undefined {
+  return (
+    env("EL_TOQUE_API_KEY") ??
+    env("ELTOQUE_API_TOKEN") ??
+    env("EL_TOQUE_API_TOKEN")
+  );
+}
+
 export async function fetchElToqueRates(
-  apiKey = env("EL_TOQUE_API_KEY") ?? env("EL_TOQUE_API_TOKEN"),
+  apiKey = resolveApiKey(),
 ): Promise<ElToqueRates> {
   if (apiKey) {
     try {
@@ -38,17 +47,10 @@ export async function fetchElToqueRates(
 }
 
 async function fetchElToqueRatesApi(apiKey: string): Promise<ElToqueRates> {
-  const now = new Date();
-  const from = new Date(now.getTime() - 48 * 60 * 60 * 1000);
-  const fmt = (d: Date) => d.toISOString().slice(0, 10);
-  const url = new URL("https://tasas.eltoque.com/v1/trmi");
-  url.searchParams.set("date_from", fmt(from));
-  url.searchParams.set("date_to", fmt(now));
-
-  const res = await fetch(url, {
+  const res = await fetch("https://tasas.eltoque.com/v1/trmi", {
     headers: {
       Authorization: `Bearer ${apiKey}`,
-      Accept: "application/json",
+      accept: "*/*",
     },
   });
 
@@ -58,11 +60,15 @@ async function fetchElToqueRatesApi(apiKey: string): Promise<ElToqueRates> {
 
   const body = (await res.json()) as TrmiResponse;
   const tasas = body.tasas ?? body.data ?? {};
+  const date =
+    body.date ?? new Date().toISOString().slice(0, 10);
 
   return {
-    date: fmt(now),
+    date,
     usdCup: pickRate(tasas as Record<string, never>, "USD"),
-    eurCup: pickRate(tasas as Record<string, never>, "EUR"),
+    eurCup:
+      pickRate(tasas as Record<string, never>, "ECU") ??
+      pickRate(tasas as Record<string, never>, "EUR"),
     mlcCup: pickRate(tasas as Record<string, never>, "MLC"),
   };
 }

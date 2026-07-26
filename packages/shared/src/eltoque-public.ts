@@ -1,5 +1,12 @@
-import { env } from "./env";
 import type { ElToqueRates } from "./eltoque";
+
+type RateField = "usdCup" | "eurCup" | "mlcCup";
+
+const CURRENCY_CELL_IDS: Record<string, RateField> = {
+  "0": "usdCup",
+  "1": "eurCup",
+  "2": "mlcCup",
+};
 
 /** Tasas publicadas en eltoque.com cuando no hay API key. */
 export async function fetchPublicElToqueRates(): Promise<ElToqueRates> {
@@ -12,22 +19,27 @@ export async function fetchPublicElToqueRates(): Promise<ElToqueRates> {
   }
 
   const html = await res.text();
-  const usdMatch = html.match(/1 USD[\s\S]{0,80}?(\d+(?:\.\d+)?)\s*CUP/i);
-  const eurMatch = html.match(/1 EUR[\s\S]{0,80}?(\d+(?:\.\d+)?)\s*CUP/i);
-  const mlcMatch = html.match(/1 MLC[\s\S]{0,80}?(\d+(?:\.\d+)?)\s*CUP/i);
+  const rates: ElToqueRates = {
+    date: new Date().toISOString().slice(0, 10),
+    usdCup: null,
+    eurCup: null,
+    mlcCup: null,
+  };
 
-  const usdCup = usdMatch ? Number.parseFloat(usdMatch[1]) : null;
-  const eurCup = eurMatch ? Number.parseFloat(eurMatch[1]) : null;
-  const mlcCup = mlcMatch ? Number.parseFloat(mlcMatch[1]) : null;
+  for (const [cellId, field] of Object.entries(CURRENCY_CELL_IDS)) {
+    const match = html.match(
+      new RegExp(
+        `id="cell-title-v2-${cellId}"[\\s\\S]{0,400}?(\\d+(?:\\.\\d+)?)<!--\\s*-->\\s*CUP`,
+      ),
+    );
+    if (match) {
+      rates[field] = Number.parseFloat(match[1]);
+    }
+  }
 
-  if (!usdCup && !eurCup) {
+  if (!rates.usdCup && !rates.eurCup) {
     throw new Error("Could not parse public elTOQUE rates");
   }
 
-  return {
-    date: new Date().toISOString().slice(0, 10),
-    usdCup,
-    eurCup,
-    mlcCup,
-  };
+  return rates;
 }
