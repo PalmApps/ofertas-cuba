@@ -75,7 +75,7 @@ export function SearchPanel() {
       <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.75rem" }}>
         <input
           type="search"
-          placeholder="Ej: iphone, arroz, laptop..."
+          placeholder="Ej: revolico ssp, arroz, iphone..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && search()}

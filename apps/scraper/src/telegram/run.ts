@@ -1,7 +1,7 @@
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
 import { loadJson, persistOffers } from "../lib.js";
-import { inferProvinceFromText, looksLikeOffer, parseOfferText } from "@ofertas-cuba/shared";
+import { inferProvinceFromText, looksLikeOffer, parseOfferText, channelSearchTags } from "@ofertas-cuba/shared";
 import type { Entity } from "telegram/define.js";
 
 interface TelegramChannelSeed {
@@ -120,6 +120,11 @@ export async function runTelegramScraper(): Promise<void> {
 
         if (parsed && looksLikeOffer(text)) {
           parsed.provinceId = provinceId;
+          const tags = channelSearchTags(
+            channelLabels(channel, entity),
+            channel.username,
+          );
+          parsed.productKey = `${parsed.productKey} ${tags}`.trim().slice(0, 200);
           allOffers.push(parsed);
         }
       }

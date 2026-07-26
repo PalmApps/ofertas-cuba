@@ -27,9 +27,9 @@
   {
     "username": "compraventazonacentral",
     "name": "Compra-Venta SS y Santa Clara",
-    "provinceId": "ssp",
+    "provinceId": null,
     "type": "group",
-    "notes": "También Villa Clara; visible en búsqueda SSP"
+    "notes": "Cubre SS (SSP) y Santa Clara (VCL). provinceId null = visible en ambas provincias."
   },
   {
     "username": "compra_venta_cuba",

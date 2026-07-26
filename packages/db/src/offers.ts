@@ -1,5 +1,5 @@
 import { and, desc, eq, ilike, isNull, or } from "drizzle-orm";
-import { expandSearchTerms } from "@ofertas-cuba/shared";
+import { expandSearchTerms, fixCommonTypos } from "@ofertas-cuba/shared";
 import type { ParsedOffer } from "@ofertas-cuba/shared";
 import type { Db } from "./client";
 import { offers, reports } from "./schema";
@@ -10,17 +10,33 @@ export interface SearchOffersParams {
   limit?: number;
 }
 
-export async function searchOffers(db: Db, params: SearchOffersParams) {
-  const terms = expandSearchTerms(params.query);
-  const limit = params.limit ?? 20;
-  if (terms.length === 0) return [];
+function queryTokens(query: string): string[] {
+  const fixed = fixCommonTypos(query);
+  return [...new Set(fixed.split(" ").filter((t) => t.length >= 2))];
+}
 
-  const textMatch = or(
-    ...terms.flatMap((term) => [
+function tokenMatch(token: string) {
+  const variants = expandSearchTerms(token);
+  return or(
+    ...variants.flatMap((term) => [
       ilike(offers.productKey, `%${term}%`),
       ilike(offers.rawText, `%${term}%`),
     ]),
   );
+}
+
+export async function searchOffers(db: Db, params: SearchOffersParams) {
+  const limit = params.limit ?? 20;
+  const tokens = queryTokens(params.query);
+  if (tokens.length === 0) return [];
+
+  let textMatch;
+  if (tokens.length === 1) {
+    textMatch = tokenMatch(tokens[0]!);
+  } else {
+    // Varias palabras: cada token debe coincidir (ej. "revolico ssp").
+    textMatch = and(...tokens.map((token) => tokenMatch(token)));
+  }
 
   const conditions = [textMatch];
 
