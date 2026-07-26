@@ -52,6 +52,8 @@ const PROVINCE_ALIASES: { pattern: string; id: Province["id"] }[] = [
   { pattern: "santa clara", id: "vcl" },
   { pattern: "pinar del rio", id: "pin" },
   { pattern: "sancti spiritus", id: "ssp" },
+  { pattern: "santi spiritus", id: "ssp" },
+  { pattern: " y ss ", id: "ssp" },
   { pattern: "ciego de avila", id: "cav" },
   { pattern: "las tunas", id: "ltu" },
   { pattern: "isla de la juventud", id: "ij" },

@@ -1,5 +1,37 @@
 [
   {
+    "username": "Ventas_Revolico_SanctiSpiritus",
+    "name": "Revolico Sancti Spíritus",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Prioridad SSP — ~12k miembros"
+  },
+  {
+    "username": "revolicossp",
+    "name": "Revolico Sancti Spiritus",
+    "provinceId": "ssp",
+    "type": "group"
+  },
+  {
+    "username": "Ofertas_Santi_Spiritus",
+    "name": "Ofertas Sancti Spiritus",
+    "provinceId": "ssp",
+    "type": "group"
+  },
+  {
+    "username": "compvent",
+    "name": "Compra y Venta Sancti Spíritus",
+    "provinceId": "ssp",
+    "type": "group"
+  },
+  {
+    "username": "compraventazonacentral",
+    "name": "Compra-Venta SS y Santa Clara",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "También Villa Clara; visible en búsqueda SSP"
+  },
+  {
     "username": "compra_venta_cuba",
     "name": "Compra Venta Promo CUBA",
     "provinceId": null,
