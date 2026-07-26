@@ -1,7 +1,8 @@
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
 import { loadJson, persistOffers } from "../lib.js";
-import { looksLikeOffer, parseOfferText } from "@ofertas-cuba/shared";
+import { inferProvinceFromText, looksLikeOffer, parseOfferText } from "@ofertas-cuba/shared";
+import type { Entity } from "telegram/define.js";
 
 interface TelegramChannelSeed {
   username: string;
@@ -15,6 +16,28 @@ const SKIP_USERNAMES = new Set<string>();
 
 function messageUrl(username: string, messageId: number): string {
   return `https://t.me/${username}/${messageId}`;
+}
+
+function channelLabels(
+  seed: TelegramChannelSeed,
+  entity: Entity,
+): string {
+  const parts = [seed.name];
+  if ("title" in entity && typeof entity.title === "string" && entity.title) {
+    parts.push(entity.title);
+  }
+  if ("username" in entity && typeof entity.username === "string" && entity.username) {
+    parts.push(entity.username);
+  }
+  return parts.join(" · ");
+}
+
+function resolveChannelProvinceId(
+  seed: TelegramChannelSeed,
+  entity: Entity,
+): string | null {
+  if (seed.provinceId) return seed.provinceId;
+  return inferProvinceFromText(channelLabels(seed, entity))?.id ?? null;
 }
 
 /**
@@ -55,11 +78,14 @@ export async function runTelegramScraper(): Promise<void> {
 
   const allOffers = [];
 
-  for (const channel of channels.slice(0, 10)) {
+  for (const channel of channels.slice(0, 25)) {
     try {
       const entity = await client.getEntity(channel.username);
+      const provinceId = resolveChannelProvinceId(channel, entity);
       const messages = await client.getMessages(entity, { limit: 50 });
-      console.log(`OK: ${channel.name} — ${messages.length} mensajes`);
+      console.log(
+        `OK: ${channel.name} (${provinceId ?? "nacional"}) — ${messages.length} mensajes`,
+      );
 
       for (const msg of messages) {
         const text = msg.message?.trim();
@@ -72,7 +98,7 @@ export async function runTelegramScraper(): Promise<void> {
         });
 
         if (parsed && looksLikeOffer(text)) {
-          parsed.provinceId = channel.provinceId;
+          parsed.provinceId = provinceId;
           allOffers.push(parsed);
         }
       }

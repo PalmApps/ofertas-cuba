@@ -12,15 +12,69 @@
     "type": "group"
   },
   {
+    "username": "cubacompras",
+    "name": "Cuba Compra/Ventas",
+    "provinceId": null,
+    "type": "group"
+  },
+  {
+    "username": "lachopi",
+    "name": "La Chopi Compra/Venta Cuba",
+    "provinceId": null,
+    "type": "channel"
+  },
+  {
     "username": "habanetventa",
     "name": "HabaNet Compra/Ventas La Habana",
     "provinceId": "hab",
     "type": "group"
   },
   {
-    "username": "cubacompras",
-    "name": "Cuba Compra/Ventas",
-    "provinceId": null,
+    "username": "compraventahabana",
+    "name": "Compra Venta Habana",
+    "provinceId": "hab",
+    "type": "group"
+  },
+  {
+    "username": "compraventavcl",
+    "name": "Compra Venta Villa Clara",
+    "provinceId": "vcl",
+    "type": "group"
+  },
+  {
+    "username": "cvcamaguey",
+    "name": "Compra-Ventas-Camaguey",
+    "provinceId": "cmg",
+    "type": "group"
+  },
+  {
+    "username": "ventas_revolico_santiago_de_cuba",
+    "name": "Revolico Santiago de Cuba",
+    "provinceId": "stg",
+    "type": "group"
+  },
+  {
+    "username": "ventas_santiago_de_cuba",
+    "name": "Ventas Santiago de Cuba",
+    "provinceId": "stg",
+    "type": "group"
+  },
+  {
+    "username": "Santiago_Ventas",
+    "name": "Santiago Ventas",
+    "provinceId": "stg",
+    "type": "group"
+  },
+  {
+    "username": "holguinventas",
+    "name": "Holguin Compra Venta",
+    "provinceId": "hol",
+    "type": "group"
+  },
+  {
+    "username": "pinarcompraventa",
+    "name": "Pinar del Rio Compra Venta",
+    "provinceId": "pin",
     "type": "group"
   }
 ]
