@@ -60,11 +60,34 @@ function resolveChannelProvinceId(
   return inferProvinceFromText(channelLabels(seed, entity))?.id ?? null;
 }
 
+function loadFromDotenvBlock(block: string): void {
+  for (const line of block.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq === -1) continue;
+    const key = trimmed.slice(0, eq).trim();
+    let value = trimmed.slice(eq + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    if (key && value && !process.env[key]) {
+      process.env[key] = value;
+    }
+  }
+}
+
 function requireTelegramEnv(): {
   apiId: number;
   apiHash: string;
   session: string;
 } {
+  const block = process.env.TELEGRAM_SCRAPER_DOTENV?.trim();
+  if (block) loadFromDotenvBlock(block);
+
   const apiId = Number(process.env.TELEGRAM_API_ID);
   const apiHash = process.env.TELEGRAM_API_HASH?.trim();
   const session = process.env.TELEGRAM_USER_SESSION?.trim();
