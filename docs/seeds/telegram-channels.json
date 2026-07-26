@@ -18,12 +18,6 @@
     "type": "group"
   },
   {
-    "username": "lachopi",
-    "name": "La Chopi Compra/Venta Cuba",
-    "provinceId": null,
-    "type": "channel"
-  },
-  {
     "username": "habanetventa",
     "name": "HabaNet Compra/Ventas La Habana",
     "provinceId": "hab",
@@ -33,12 +27,6 @@
     "username": "compraventahabana",
     "name": "Compra Venta Habana",
     "provinceId": "hab",
-    "type": "group"
-  },
-  {
-    "username": "compraventavcl",
-    "name": "Compra Venta Villa Clara",
-    "provinceId": "vcl",
     "type": "group"
   },
   {
@@ -54,20 +42,8 @@
     "type": "group"
   },
   {
-    "username": "ventas_santiago_de_cuba",
-    "name": "Ventas Santiago de Cuba",
-    "provinceId": "stg",
-    "type": "group"
-  },
-  {
-    "username": "Santiago_Ventas",
-    "name": "Santiago Ventas",
-    "provinceId": "stg",
-    "type": "group"
-  },
-  {
-    "username": "holguinventas",
-    "name": "Holguin Compra Venta",
+    "username": "Holguin_Cadeca",
+    "name": "Holguin Cadeca Compra Venta",
     "provinceId": "hol",
     "type": "group"
   },
