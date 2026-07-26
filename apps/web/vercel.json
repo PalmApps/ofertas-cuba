@@ -2,5 +2,16 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "cd ../.. && pnpm install",
-  "buildCommand": "cd ../.. && pnpm --filter @ofertas-cuba/web build"
+  "buildCommand": "cd ../.. && pnpm --filter @ofertas-cuba/web build",
+  "crons": [
+    {
+      "path": "/api/cron/scrape-telegram",
+      "schedule": "0 */4 * * *"
+    }
+  ],
+  "functions": {
+    "src/app/api/cron/scrape-telegram/route.ts": {
+      "maxDuration": 300
+    }
+  }
 }

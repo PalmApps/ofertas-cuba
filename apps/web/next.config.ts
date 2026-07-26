@@ -5,7 +5,9 @@ const nextConfig: NextConfig = {
     "@ofertas-cuba/shared",
     "@ofertas-cuba/db",
     "@ofertas-cuba/bot",
+    "@ofertas-cuba/scraper",
   ],
+  serverExternalPackages: ["telegram"],
 };
 
 export default nextConfig;

@@ -60,6 +60,9 @@ importers:
       '@ofertas-cuba/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@ofertas-cuba/scraper':
+        specifier: workspace:*
+        version: link:../scraper
       '@ofertas-cuba/shared':
         specifier: workspace:*
         version: link:../../packages/shared

@@ -12,6 +12,7 @@
   "dependencies": {
     "@ofertas-cuba/bot": "workspace:*",
     "@ofertas-cuba/db": "workspace:*",
+    "@ofertas-cuba/scraper": "workspace:*",
     "@ofertas-cuba/shared": "workspace:*",
     "grammy": "^1.36.3",
     "next": "^15.4.3",
