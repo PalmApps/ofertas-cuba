@@ -1,4 +1,5 @@
 import type { OfferCurrency } from "../types";
+import { fixCommonTypos } from "../text-normalize";
 
 const CURRENCY_PATTERNS: Array<{ currency: OfferCurrency; pattern: RegExp }> = [
   { currency: "USD", pattern: /\b(usd|dolar(?:es)?|dlls?|us\$|\$)\b/i },
@@ -66,10 +67,7 @@ export function extractPrice(text: string): number | null {
 }
 
 export function normalizeProductKey(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
+  return fixCommonTypos(text)
     .replace(/[^a-z0-9\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim()

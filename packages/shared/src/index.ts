@@ -1,4 +1,5 @@
 export * from "./env";
+export * from "./text-normalize";
 export * from "./provinces";
 export * from "./blacklist";
 export * from "./types";

@@ -1,4 +1,5 @@
 import { and, desc, eq, ilike, isNull, or } from "drizzle-orm";
+import { expandSearchTerms } from "@ofertas-cuba/shared";
 import type { ParsedOffer } from "@ofertas-cuba/shared";
 import type { Db } from "./client";
 import { offers, reports } from "./schema";
@@ -10,11 +11,15 @@ export interface SearchOffersParams {
 }
 
 export async function searchOffers(db: Db, params: SearchOffersParams) {
-  const q = params.query.trim().toLowerCase();
+  const terms = expandSearchTerms(params.query);
   const limit = params.limit ?? 20;
+  if (terms.length === 0) return [];
+
   const textMatch = or(
-    ilike(offers.productKey, `%${q}%`),
-    ilike(offers.rawText, `%${q}%`),
+    ...terms.flatMap((term) => [
+      ilike(offers.productKey, `%${term}%`),
+      ilike(offers.rawText, `%${term}%`),
+    ]),
   );
 
   const conditions = [textMatch];
