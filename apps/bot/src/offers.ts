@@ -61,6 +61,27 @@ export async function searchProductOffers(
   provinceId: string | null,
   limit = 5,
 ) {
+  const appUrl = (
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://ofertascuba.vercel.app"
+  ).replace(/\/$/, "");
+  const params = new URLSearchParams({
+    q: query,
+    limit: String(limit),
+  });
+  if (provinceId) params.set("provincia", provinceId);
+
+  try {
+    const res = await fetch(`${appUrl}/api/offers/search?${params}`, {
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const data = (await res.json()) as { offers?: Awaited<ReturnType<typeof searchOffers>> };
+      return data.offers ?? [];
+    }
+  } catch (err) {
+    console.warn("searchProductOffers via API failed:", err);
+  }
+
   if (!useDb()) return [];
 
   const db = createDb();
