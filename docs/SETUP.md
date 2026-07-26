@@ -55,6 +55,18 @@ pnpm --filter @ofertas-cuba/scraper auth:telegram
 
 Usar numero dedicado (no personal). Guardar session string en GitHub Secret.
 
+**Sin copiar a mano en GitHub:** con `gh auth login` y un `.env` local:
+
+```bash
+pnpm secrets:sync
+```
+
+Sube a `PalmApps/ofertas-cuba` todo lo que tengas en `.env` (DATABASE_URL, TELEGRAM_*, EL_TOQUE, etc.). Para secrets de toda la org:
+
+```bash
+pnpm secrets:sync -- --org PalmApps
+```
+
 ## 7. PalmApps foro
 
 Desde `palmapps-notify` (con token admin):
