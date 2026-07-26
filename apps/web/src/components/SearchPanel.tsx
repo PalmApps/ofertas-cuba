@@ -45,7 +45,9 @@ export function SearchPanel() {
         if (data.message) setMessage(data.message);
         setOffers(data.offers ?? []);
         if (!data.offers?.length && !data.message) {
-          setMessage("Sin resultados. El indice se llena con los scrapers.");
+          setMessage(
+            "Sin resultados para esa busqueda. Prueba otro termino o revisa mas tarde.",
+          );
         }
       } catch {
         setMessage("Error de busqueda");

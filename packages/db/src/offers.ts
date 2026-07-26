@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike } from "drizzle-orm";
+import { and, desc, eq, ilike, isNull, or } from "drizzle-orm";
 import type { ParsedOffer } from "@ofertas-cuba/shared";
 import type { Db } from "./client";
 import { offers, reports } from "./schema";
@@ -12,10 +12,18 @@ export interface SearchOffersParams {
 export async function searchOffers(db: Db, params: SearchOffersParams) {
   const q = params.query.trim().toLowerCase();
   const limit = params.limit ?? 20;
-  const conditions = [ilike(offers.productKey, `%${q}%`)];
+  const textMatch = or(
+    ilike(offers.productKey, `%${q}%`),
+    ilike(offers.rawText, `%${q}%`),
+  );
 
+  const conditions = [textMatch];
+
+  // Ofertas sin provincia aplican a toda Cuba; las demas filtran por provincia.
   if (params.provinceId) {
-    conditions.push(eq(offers.provinceId, params.provinceId));
+    conditions.push(
+      or(isNull(offers.provinceId), eq(offers.provinceId, params.provinceId)),
+    );
   }
 
   return db
