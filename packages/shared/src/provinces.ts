@@ -1,3 +1,5 @@
+import { levenshtein, normalizeAscii } from "./text-normalize";
+
 export interface Province {
   id: string;
   name: string;
@@ -29,20 +31,33 @@ export const PROVINCE_BY_SLUG = Object.fromEntries(
 ) as Record<string, Province>;
 
 export function findProvinceByName(input: string): Province | undefined {
-  const normalized = input.trim().toLowerCase();
-  return PROVINCES.find(
+  const normalized = normalizeAscii(input);
+  const exact = PROVINCES.find(
     (p) =>
-      p.name.toLowerCase() === normalized ||
+      normalizeAscii(p.name) === normalized ||
       p.slug === normalized ||
       p.id === normalized,
   );
+  if (exact) return exact;
+
+  const inferred = inferProvinceFromText(input);
+  if (inferred) return inferred;
+
+  let best: Province | undefined;
+  let bestDistance = 3;
+  for (const province of PROVINCES) {
+    const distance = levenshtein(normalized, normalizeAscii(province.name));
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      best = province;
+    }
+  }
+
+  return bestDistance <= 2 ? best : undefined;
 }
 
 function normalizeProvinceHint(text: string): string {
-  return text
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .toLowerCase();
+  return normalizeAscii(text);
 }
 
 const PROVINCE_ALIASES: { pattern: string; id: Province["id"] }[] = [
@@ -52,6 +67,14 @@ const PROVINCE_ALIASES: { pattern: string; id: Province["id"] }[] = [
   { pattern: "santa clara", id: "vcl" },
   { pattern: "pinar del rio", id: "pin" },
   { pattern: "sancti spiritus", id: "ssp" },
+  { pattern: "santi spiritus", id: "ssp" },
+  { pattern: "santo spiritus", id: "ssp" },
+  { pattern: "sancti espiritus", id: "ssp" },
+  { pattern: "santi espiritus", id: "ssp" },
+  { pattern: "sanctispiritus", id: "ssp" },
+  { pattern: "spiritus", id: "ssp" },
+  { pattern: " y ss ", id: "ssp" },
+  { pattern: " ss ", id: "ssp" },
   { pattern: "ciego de avila", id: "cav" },
   { pattern: "las tunas", id: "ltu" },
   { pattern: "isla de la juventud", id: "ij" },

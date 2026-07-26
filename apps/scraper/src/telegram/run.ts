@@ -13,6 +13,23 @@ interface TelegramChannelSeed {
 }
 
 const SKIP_USERNAMES = new Set<string>();
+const DEFAULT_MESSAGE_LIMIT = 100;
+const SSP_MESSAGE_LIMIT = 150;
+
+function sortChannelsForScrape(
+  channels: TelegramChannelSeed[],
+): TelegramChannelSeed[] {
+  const rank = (c: TelegramChannelSeed): number => {
+    if (c.provinceId === "ssp") return 0;
+    if (c.provinceId == null) return 1;
+    return 2;
+  };
+  return [...channels].sort((a, b) => rank(a) - rank(b));
+}
+
+function messageLimitForChannel(channel: TelegramChannelSeed): number {
+  return channel.provinceId === "ssp" ? SSP_MESSAGE_LIMIT : DEFAULT_MESSAGE_LIMIT;
+}
 
 function messageUrl(username: string, messageId: number): string {
   return `https://t.me/${username}/${messageId}`;
@@ -44,8 +61,10 @@ function resolveChannelProvinceId(
  * Lee mensajes recientes de canales/grupos publicos semilla.
  */
 export async function runTelegramScraper(): Promise<void> {
-  const channels = loadJson<TelegramChannelSeed[]>("telegram-channels.json").filter(
-    (c) => !SKIP_USERNAMES.has(c.username) && !c.username.startsWith("ejemplo"),
+  const channels = sortChannelsForScrape(
+    loadJson<TelegramChannelSeed[]>("telegram-channels.json").filter(
+      (c) => !SKIP_USERNAMES.has(c.username) && !c.username.startsWith("ejemplo"),
+    ),
   );
   console.log(`Telegram scraper — ${channels.length} fuentes activas`);
 
@@ -82,7 +101,9 @@ export async function runTelegramScraper(): Promise<void> {
     try {
       const entity = await client.getEntity(channel.username);
       const provinceId = resolveChannelProvinceId(channel, entity);
-      const messages = await client.getMessages(entity, { limit: 50 });
+      const messages = await client.getMessages(entity, {
+        limit: messageLimitForChannel(channel),
+      });
       console.log(
         `OK: ${channel.name} (${provinceId ?? "nacional"}) — ${messages.length} mensajes`,
       );

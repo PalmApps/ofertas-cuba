@@ -21,3 +21,4 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           FB_SCRAPE_USER_AGENT: OfertasCuba/0.1 (+https://ofertascuba.vercel.app)
+          FB_SESSION_COOKIE: ${{ secrets.FB_SESSION_COOKIE }}
