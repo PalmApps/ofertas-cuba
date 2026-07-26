@@ -41,6 +41,7 @@ export const offers = pgTable("offers", {
   phone: text("phone"),
   fbPostUrl: text("fb_post_url"),
   telegramMessageUrl: text("telegram_message_url"),
+  sourceChannelName: text("source_channel_name"),
   provinceId: text("province_id").references(() => provinces.id),
   scrapedAt: timestamp("scraped_at", { withTimezone: true }).notNull().defaultNow(),
   expiresAt: timestamp("expires_at", { withTimezone: true }),

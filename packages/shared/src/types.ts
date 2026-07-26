@@ -12,6 +12,7 @@ export interface ParsedOffer {
   sourceUrl: string | null;
   sourcePlatform: SourcePlatform;
   externalGroupId: string | null;
+  sourceChannelName: string | null;
   scrapedAt: string;
 }
 

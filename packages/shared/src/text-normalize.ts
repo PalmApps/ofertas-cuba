@@ -8,39 +8,40 @@ export function normalizeAscii(text: string): string {
     .trim();
 }
 
-/** Correcciones frecuentes en posts de compra/venta cubanos. */
+/** Correcciones frecuentes en posts y titulos de grupos cubanos. */
 const TYPO_FIXES: Record<string, string> = {
+  revoliko: "revolico",
+  rebolico: "revolico",
+  revolic: "revolico",
+  revolco: "revolico",
+  revoliico: "revolico",
+  revolicoo: "revolico",
+  reboliko: "revolico",
   amoxcilina: "amoxicilina",
   amoxicilna: "amoxicilina",
-  amoxicilina: "amoxicilina",
   ifone: "iphone",
   ayfon: "iphone",
   iphon: "iphone",
   samsun: "samsung",
   sansung: "samsung",
-  xiaomi: "xiaomi",
   shiaomi: "xiaomi",
   neveraa: "nevera",
-  nevera: "nevera",
   librador: "liberado",
-  liberado: "liberado",
   arro: "arroz",
-  arroz: "arroz",
-  lavadora: "lavadora",
   lavadoraa: "lavadora",
-  bicicleta: "bicicleta",
   bici: "bicicleta",
-  moto: "moto",
   motocicleta: "moto",
   play: "playstation",
-  playstation: "playstation",
-  lavamanos: "lavamanos",
-  split: "split",
-  aire: "aire",
-  acondicionado: "acondicionado",
-  venta: "venta",
-  vendo: "vendo",
-  compro: "compro",
+};
+
+/** Variantes utiles al buscar (no canonical, solo expansion). */
+const SEARCH_SYNONYMS: Record<string, string[]> = {
+  revolico: ["revoliko", "rebolico"],
+  ssp: ["sancti", "spiritus", "santi"],
+  ss: ["sancti", "spiritus"],
+  vcl: ["villa", "clara", "santa"],
+  santa: ["clara"],
+  clara: ["santa"],
 };
 
 export function fixCommonTypos(text: string): string {
@@ -51,7 +52,7 @@ export function fixCommonTypos(text: string): string {
   return out.replace(/\s+/g, " ").trim();
 }
 
-/** Variantes de busqueda (query original + corregida + tokens). */
+/** Tokens de busqueda: original, corregido, sinonimos y palabras sueltas. */
 export function expandSearchTerms(query: string): string[] {
   const raw = query.trim().toLowerCase();
   const fixed = fixCommonTypos(query);
@@ -60,11 +61,26 @@ export function expandSearchTerms(query: string): string[] {
   if (raw) terms.add(raw);
   if (fixed) terms.add(fixed);
 
-  for (const token of fixed.split(" ")) {
-    if (token.length >= 3) terms.add(token);
+  for (const token of fixed.split(" ").filter(Boolean)) {
+    if (token.length >= 2) terms.add(token);
+    const synonyms = SEARCH_SYNONYMS[token];
+    if (synonyms) {
+      for (const syn of synonyms) {
+        if (syn.length >= 2) terms.add(syn);
+      }
+    }
   }
 
   return [...terms];
+}
+
+/** Etiquetas del canal/grupo para enriquecer busqueda (revolico, ssp, zona, etc.). */
+export function channelSearchTags(title: string, username?: string): string {
+  const parts = [title];
+  if (username) {
+    parts.push(username.replace(/_/g, " "));
+  }
+  return fixCommonTypos(parts.join(" "));
 }
 
 export function levenshtein(a: string, b: string): number {
