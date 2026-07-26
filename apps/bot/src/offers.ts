@@ -2,6 +2,7 @@ import {
   convertToUsdEur,
   fetchElToqueRates,
   parseOfferText,
+  resolveOfferProvinceId,
 } from "@ofertas-cuba/shared";
 import { createDb, insertOffer, searchOffers } from "@ofertas-cuba/db";
 
@@ -22,7 +23,7 @@ export async function indexForwardedOffer(
   });
 
   if (!parsed) return false;
-  parsed.provinceId = provinceId;
+  parsed.provinceId = resolveOfferProvinceId(text, provinceId);
 
   if (!useDb()) return true;
 

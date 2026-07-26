@@ -170,3 +170,54 @@ export function inferProvinceFromText(text: string): Province | undefined {
 
   return undefined;
 }
+
+function provinceFromLocationPhrase(phrase: string): Province | undefined {
+  const parts = phrase.trim().split(/\s+/).filter(Boolean);
+  for (let len = Math.min(parts.length, 4); len >= 1; len--) {
+    const found = findProvinceByName(parts.slice(0, len).join(" "));
+    if (found) return found;
+  }
+  return undefined;
+}
+
+/** Detecta provincia del vendedor en el texto del post (grupos nacionales). */
+export function inferProvinceFromOfferText(text: string): Province | undefined {
+  const normalized = normalizeAscii(text);
+  if (!normalized) return undefined;
+
+  const locationPhrases = [
+    /\bsoy de\s+([^.,!\n]{2,45})/,
+    /\b(?:ubicacion|ubicado en|localizado en|servicio ubicacion)\s+([^.,!\n]{2,45})/,
+    /\b(?:envio(?:s)? desde|entrega en|vendo en|desde)\s+([^.,!\n]{2,45})/,
+    /\b(?:vivo en|estoy en)\s+([^.,!\n]{2,45})/,
+  ];
+
+  for (const pattern of locationPhrases) {
+    const match = normalized.match(pattern);
+    if (!match?.[1]) continue;
+    const found = provinceFromLocationPhrase(match[1]);
+    if (found) return found;
+  }
+
+  for (const alias of PROVINCE_ALIASES) {
+    if (
+      normalized.includes(` contacto ${alias.pattern}`) ||
+      normalized.includes(` ubicacion ${alias.pattern}`) ||
+      normalized.includes(` servicio ubicacion ${alias.pattern}`)
+    ) {
+      return PROVINCES.find((p) => p.id === alias.id);
+    }
+  }
+
+  return undefined;
+}
+
+/** Provincia efectiva: prioriza lo que dice el vendedor en el post. */
+export function resolveOfferProvinceId(
+  rawText: string,
+  channelProvinceId: string | null,
+): string | null {
+  const fromPost = inferProvinceFromOfferText(rawText)?.id ?? null;
+  if (fromPost) return fromPost;
+  return channelProvinceId;
+}
