@@ -1,18 +1,122 @@
 [
   {
-    "name": "Compra Venta Cuba (ejemplo)",
-    "url": "https://www.facebook.com/groups/ejemplo-compra-venta-cuba",
+    "name": "Compra y Vende en Cuba",
+    "url": "https://www.facebook.com/groups/comprayvendecuba",
     "provinceId": null,
-    "notes": "Reemplazar con grupos publicos reales en fase 1"
+    "notes": "Grupo general con más de 140,000 usuarios. Uno de los más grandes para todo tipo de productos."
   },
   {
-    "name": "La Habana compra venta (ejemplo)",
-    "url": "https://www.facebook.com/groups/ejemplo-habana",
-    "provinceId": "hab"
+    "name": "Tienda MLC en La Habana y otras cositas más",
+    "url": "https://www.facebook.com/groups/tiendamlclahabana",
+    "provinceId": "hab",
+    "notes": "Específico para productos en tiendas MLC ubicadas en La Habana. Más de 106,000 miembros."
   },
   {
-    "name": "MLC Cuba (ejemplo)",
-    "url": "https://www.facebook.com/groups/ejemplo-mlc",
-    "provinceId": null
+    "name": "PONTUCASACUBA",
+    "url": "https://www.facebook.com/groups/pontucasacuba",
+    "provinceId": null,
+    "notes": "Enfoque en compra, venta y alquiler de viviendas. Más de 82,000 miembros."
+  },
+  {
+    "name": "VENTA DE AUTOS Y MOTOS EN LA ISLA DE CUBA",
+    "url": "https://www.facebook.com/groups/ventadeautosymotoscuba",
+    "provinceId": null,
+    "notes": "Especializado en vehículos. Más de 152,000 miembros."
+  },
+  {
+    "name": "Todo en MLC",
+    "url": "https://www.facebook.com/groups/todoenmlc",
+    "provinceId": null,
+    "notes": "Grupo público masivo (más de 200,000 seguidores) para rastrear productos en tiendas MLC a nivel nacional."
+  },
+  {
+    "name": "Mercadeo en RedHabana",
+    "url": "https://www.facebook.com/groups/mercadeoenredhabana",
+    "provinceId": "hab",
+    "notes": "Compra y venta general en La Habana: móviles, electrodomésticos, bicicletas."
+  },
+  {
+    "name": "Ventas, compras y permutas de casas",
+    "url": "https://www.facebook.com/groups/ventascasashabana",
+    "provinceId": "hab",
+    "notes": "Grupo público específico para viviendas en La Habana."
+  },
+  {
+    "name": "Revolico mantilla",
+    "url": "https://www.facebook.com/groups/revolicomantilla",
+    "provinceId": null,
+    "notes": "Grupo de ventas y compras general, estilo Revolico."
+  },
+  {
+    "name": "Ventas en la Habana",
+    "url": "https://www.facebook.com/groups/ventasenlahabana",
+    "provinceId": "hab",
+    "notes": "Grupo general de compras y ventas enfocado en La Habana."
+  },
+  {
+    "name": "Ventas de productos nuevos en Holguín",
+    "url": "https://www.facebook.com/groups/ventasholguin",
+    "provinceId": "hol",
+    "notes": "Productos nuevos con garantía en la provincia de Holguín."
+  },  
+  {
+    "name": "Compra Venta Sancti Spíritus (SSP)",
+    "url": "https://www.facebook.com/groups/compraventassp",
+    "provinceId": "ssp",
+    "notes": "Grupo general para toda la provincia. Incluye ofertas de la capital y municipios cercanos."
+  },
+  {
+    "name": "Mercado Libre Trinidad Cuba",
+    "url": "https://www.facebook.com/groups/mercadolibretrinidadcuba",
+    "provinceId": "ssp",
+    "notes": "Enfoque en el municipio de Trinidad. Turismo, artesanías y productos básicos."
+  },
+  {
+    "name": "Compra Venta Cabaiguán",
+    "url": "https://www.facebook.com/groups/compraventacabaiguan",
+    "provinceId": "ssp",
+    "notes": "Específico para el municipio de Cabaiguán, conocido por su actividad comercial agrícola y de servicios."
+  },
+  {
+    "name": "Ventas y Permutas Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/ventaspermútassp",
+    "provinceId": "ssp",
+    "notes": "Grupo activo para permutas de viviendas y vehículos en toda la provincia."
+  },
+  {
+    "name": "Revolico Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/revolicossanctispiritus",
+    "provinceId": "ssp",
+    "notes": "Versión local del clásico Revolico. Todo tipo de artículos, desde electrodomésticos hasta repuestos."
+  },
+  {
+    "name": "Tiendas MLC Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/tiendasmlcssp",
+    "provinceId": "ssp",
+    "notes": "Información sobre disponibilidad de productos en tiendas MLC de la provincia (Caribe, etc.)."
+  },
+  {
+    "name": "Compra Venta Yaguajay",
+    "url": "https://www.facebook.com/groups/compraventayaguajay",
+    "provinceId": "ssp",
+    "notes": "Enfoque en el municipio del norte, Yaguajay. Productos agropecuarios y básicos."
+  },
+  {
+    "name": "Mercado de Jatibonico",
+    "url": "https://www.facebook.com/groups/mercadojatibonico",
+    "provinceId": "ssp",
+    "notes": "Grupo para el municipio de Jatibonico. Menor tamaño pero activo en productos locales."
+  },
+  {
+    "name": "Autos y Motos Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/autosmotossanctispiritus",
+    "provinceId": "ssp",
+    "notes": "Especializado en vehículos en toda la provincia SSP."
+  },
+  {
+    "name": "Casas en Venta Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/casasventassp",
+    "provinceId": "ssp",
+    "notes": "Inmobiliario específico para la provincia. Ventas, alquileres y permutas de viviendas."
   }
-]
+]   
