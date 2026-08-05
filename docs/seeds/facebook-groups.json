@@ -118,5 +118,113 @@
     "url": "https://www.facebook.com/groups/casasventassp",
     "provinceId": "ssp",
     "notes": "Inmobiliario específico para la provincia. Ventas, alquileres y permutas de viviendas."
+  },
+  {
+    "name": "Compra Venta Sancti Spíritus (SSP)",
+    "url": "https://www.facebook.com/groups/compraventassp",
+    "provinceId": "ssp",
+    "notes": "Grupo general para toda la provincia. Incluye ofertas de la capital y municipios cercanos."
+  },
+  {
+    "name": "Mercado Libre Trinidad Cuba",
+    "url": "https://www.facebook.com/groups/mercadolibretrinidadcuba",
+    "provinceId": "ssp",
+    "notes": "Enfoque en el municipio de Trinidad. Turismo, artesanías y productos básicos."
+  },
+  {
+    "name": "Compra Venta Cabaiguán",
+    "url": "https://www.facebook.com/groups/compraventacabaiguan",
+    "provinceId": "ssp",
+    "notes": "Específico para el municipio de Cabaiguán, conocido por su actividad comercial agrícola y de servicios."
+  },
+  {
+    "name": "Ventas y Permutas Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/ventaspermútassp",
+    "provinceId": "ssp",
+    "notes": "Grupo activo para permutas de viviendas y vehículos en toda la provincia."
+  },
+  {
+    "name": "Revolico Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/revolicossanctispiritus",
+    "provinceId": "ssp",
+    "notes": "Versión local del clásico Revolico. Todo tipo de artículos, desde electrodomésticos hasta repuestos."
+  },
+  {
+    "name": "Tiendas MLC Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/tiendasmlcssp",
+    "provinceId": "ssp",
+    "notes": "Información sobre disponibilidad de productos en tiendas MLC de la provincia (Caribe, etc.)."
+  },
+  {
+    "name": "Compra Venta Yaguajay",
+    "url": "https://www.facebook.com/groups/compraventayaguajay",
+    "provinceId": "ssp",
+    "notes": "Enfoque en el municipio del norte, Yaguajay. Productos agropecuarios y básicos."
+  },
+  {
+    "name": "Mercado de Jatibonico",
+    "url": "https://www.facebook.com/groups/mercadojatibonico",
+    "provinceId": "ssp",
+    "notes": "Grupo para el municipio de Jatibonico. Menor tamaño pero activo en productos locales."
+  },
+  {
+    "name": "Autos y Motos Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/autosmotossanctispiritus",
+    "provinceId": "ssp",
+    "notes": "Especializado en vehículos en toda la provincia SSP."
+  },
+  {
+    "name": "Casas en Venta Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/casasventassp",
+    "provinceId": "ssp",
+    "notes": "Inmobiliario específico para la provincia. Ventas, alquileres y permutas de viviendas."
+  },
+  {
+    "name": "Revolico Trinidad",
+    "url": "https://www.facebook.com/groups/revolicotrinidad",
+    "provinceId": "ssp",
+    "notes": "Grupo estilo Revolico enfocado en Trinidad y alrededores. Alta actividad turística."
+  },
+  {
+    "name": "Superventas Trinidad",
+    "url": "https://www.facebook.com/groups/superventastrinidad",
+    "provinceId": "ssp",
+    "notes": "Ofertas rápidas y productos variados en Trinidad."
+  },
+  {
+    "name": "Compra Venta Taguasco",
+    "url": "https://www.facebook.com/groups/compraventataguasco",
+    "provinceId": "ssp",
+    "notes": "Grupo local para el municipio de Taguasco. Productos agrícolas y de consumo diario."
+  },
+  {
+    "name": "Revolico Cabaiguán",
+    "url": "https://www.facebook.com/groups/revolicocabaiguan",
+    "provinceId": "ssp",
+    "notes": "Versión local de Revolico para Cabaiguán. Muy activo en maquinaria agrícola y repuestos."
+  },
+  {
+    "name": "MLC y Cripto Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/mlcycriptossanctispiritus",
+    "provinceId": "ssp",
+    "notes": "Enfoque en transacciones con MLC y criptomonedas en la provincia."
+  },
+  {
+    "name": "Compra Venta Fomento",
+    "url": "https://www.facebook.com/groups/compraventafomento",
+    "provinceId": "ssp",
+    "notes": "Grupo para el municipio de Fomento. Productos locales y servicios."
+  },
+  {
+    "name": "Mercado de La Sierpe",
+    "url": "https://www.facebook.com/groups/mercadolasierpe",
+    "provinceId": "ssp",
+    "notes": "Grupo pequeño pero activo para el municipio costero de La Sierpe. Pescado y productos marinos."
+  },
+  {
+    "name": "Ventas Revolico Sancti Spíritus",
+    "url": "https://www.facebook.com/groups/ventasrevolicossp",
+    "provinceId": "ssp",
+    "notes": "Otro grupo general estilo Revolico para toda la provincia. Alternativa al grupo principal."
   }
 ]   
