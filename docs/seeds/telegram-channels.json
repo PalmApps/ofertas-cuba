@@ -84,5 +84,201 @@
     "name": "Pinar del Rio Compra Venta",
     "provinceId": "pin",
     "type": "group"
+  },
+  {
+    "username": "Ventas_Revolico_SanctiSpiritus",
+    "name": "Revolico Sancti Spíritus",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Prioridad SSP — ~16k miembros. El más grande de la provincia."
+  },
+  {
+    "username": "Ofertas_Santi_Spiritus",
+    "name": "Ofertas Sancti Spiritus",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Grupo activo con publicaciones diarias de productos variados."
+  },
+  {
+    "username": "sspvende",
+    "name": "SSP Vende",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Enfoque en ventas rápidas en la capital provincial."
+  },
+  {
+    "username": "RevolicoFom",
+    "name": "Revolico Fomento",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Específico para el municipio de Fomento."
+  },
+  {
+    "username": "Mercadillo_Trinidad_Cuba",
+    "name": "Mercadillo Trinidad - Cuba",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Enfoque en Trinidad. ~1k miembros. Ideal para turismo y artesanías."
+  },
+  {
+    "username": "compraventacabaiguan",
+    "name": "Compra Venta Cabaiguán",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Grupo local para el municipio de Cabaiguán."
+  },
+  {
+    "username": "Ventas_Sancti_Spiritus",
+    "name": "Ventas Sancti Spiritus",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Listado en directorios como grupo activo de la provincia."
+  },
+  {
+    "username": "compraventazonacentral",
+    "name": "Compra-Venta SS y Santa Clara",
+    "provinceId": null,
+    "type": "group",
+    "notes": "Cubre SS (SSP) y Santa Clara (VCL). provinceId null = visible en ambas provincias."
+  },
+  {
+    "username": "compra_venta_cuba",
+    "name": "Compra Venta Promo CUBA",
+    "provinceId": null,
+    "type": "channel",
+    "notes": "Canal nacional con alta actividad (~8k miembros). Visible en SSP."
+  },
+  {
+    "username": "timbirichi_compra_y_venta_cuba",
+    "name": "Timbirichi Compra/Venta Cuba",
+    "provinceId": null,
+    "type": "group",
+    "notes": "Red nacional masiva (~84k miembros). Incluye sección SSP."
+  },
+  {
+    "username": "cubacompras",
+    "name": "Cuba Compra/Ventas",
+    "provinceId": null,
+    "type": "group",
+    "notes": "Grupo nacional general (~31k miembros)."
+  },
+  {
+    "username": "grupos_cu",
+    "name": "Grupos Cuba ®",
+    "provinceId": null,
+    "type": "channel",
+    "notes": "Canal índice que lista y enlaza a todos los grupos provinciales de Cuba, incluyendo SSP."
+  },
+  {
+    "username": "Ventas_Revolico_SanctiSpiritus",
+    "name": "Revolico Sancti Spíritus",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "El más grande de la provincia. ~15.9k miembros. Activo diariamente."
+  },
+  {
+    "username": "Santi_Spiritus_Compra_Venta",
+    "name": "Santi Spiritus Compra Venta",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "~1.8k miembros. Servicio de publicación automática de anuncios (24 veces/día)."
+  },
+  {
+    "username": "sspvende",
+    "name": "SSP Vende",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Listado en el canal índice @grupos_cu. Enfoque en ventas rápidas."
+  },
+  {
+    "username": "Ofertas_Santi_Spiritus",
+    "name": "Ofertas Sancti Spiritus",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Listado en directorios como grupo activo de la provincia."
+  },
+  {
+    "username": "RevolicoFom",
+    "name": "Revolico Fomento",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Específico para el municipio de Fomento. Listado en @grupos_cu."
+  },
+  {
+    "username": "Mercadillo_Trinidad_Cuba",
+    "name": "Mercadillo Trinidad - Cuba",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Enfoque en Trinidad. Ideal para turismo, artesanías y productos básicos."
+  },
+  {
+    "username": "compraventacabaiguan",
+    "name": "Compra Venta Cabaiguán",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Grupo local para el municipio de Cabaiguán. Activo en maquinaria y repuestos."
+  },
+  {
+    "username": "Ventas_Sancti_Spiritus",
+    "name": "Ventas Sancti Spiritus",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Listado en directorios como grupo activo de la provincia."
+  },
+  {
+    "username": "compraventazonacentral",
+    "name": "Compra-Venta SS y Santa Clara",
+    "provinceId": null,
+    "type": "group",
+    "notes": "Cubre SS (SSP) y Santa Clara (VCL). provinceId null = visible en ambas provincias."
+  },
+  {
+    "username": "Revolico_Cuba_Oficial",
+    "name": "Revolico Cuba Oficial",
+    "provinceId": null,
+    "type": "group",
+    "notes": "Grupo nacional recomendado desde el grupo principal de SSP. Alta actividad general."
+  },
+  {
+    "username": "compra_venta_cuba",
+    "name": "Compra Venta Promo CUBA",
+    "provinceId": null,
+    "type": "channel",
+    "notes": "Canal nacional con alta actividad. Visible en SSP."
+  },
+  {
+    "username": "timbirichi_compra_y_venta_cuba",
+    "name": "Timbirichi Compra/Venta Cuba",
+    "provinceId": null,
+    "type": "group",
+    "notes": "Red nacional masiva (~84k miembros). Incluye sección SSP."
+  },
+  {
+    "username": "cubacompras",
+    "name": "Cuba Compra/Ventas",
+    "provinceId": null,
+    "type": "group",
+    "notes": "Grupo nacional general (~31k miembros)."
+  },
+  {
+    "username": "grupos_cu",
+    "name": "Grupos Cuba ®",
+    "provinceId": null,
+    "type": "channel",
+    "notes": "Canal índice oficial que lista y enlaza a todos los grupos provinciales de Cuba, incluyendo SSP."
+  },
+  {
+    "username": "informateessp",
+    "name": "Infórmate SSP (Eléctrico)",
+    "provinceId": "ssp",
+    "type": "channel",
+    "notes": "Canal oficial de la Unión Eléctrica en Sancti Spíritus. Útil para saber horarios de servicio y afectaciones que impactan negocios."
+  },
+  {
+    "username": "CriptoInversiones_SSP",
+    "name": "Cripto Inversiones SSP",
+    "provinceId": "ssp",
+    "type": "group",
+    "notes": "Grupo local para intercambio de criptomonedas y negocios digitales en la provincia."
   }
 ]
